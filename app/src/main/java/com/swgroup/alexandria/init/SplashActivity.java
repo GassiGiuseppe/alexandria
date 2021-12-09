@@ -13,14 +13,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.swgroup.alexandria.MainActivity;
 import com.swgroup.alexandria.R;
+import com.swgroup.alexandria.databinding.ActivitySplashBinding;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
+    private ActivitySplashBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+
+        binding = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         };
@@ -45,9 +50,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void fade(){
-        ImageView imageView = findViewById(R.id.splash_logo);
-        Animation animationFade = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        imageView.startAnimation(animationFade);
+        binding.splashLogo.startAnimation(
+                AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.anim.fade_in));
     }
 
 }
