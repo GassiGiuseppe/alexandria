@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_favorites">
+
+    <fragment
+        android:id="@+id/navigation_books"
+        android:name="com.swgroup.alexandria.ui.books.BookFragment"
+        android:label="@string/title_books"
+        tools:layout="@layout/fragment_book" />
+
+    <fragment
+        android:id="@+id/navigation_audiobooks"
+        android:name="com.swgroup.alexandria.ui.audiobooks.AudiobookFragment"
+        android:label="@string/title_audiobooks"
+        tools:layout="@layout/fragment_audiobook" />
+
+    <fragment
+        android:id="@+id/navigation_comics"
+        android:name="com.swgroup.alexandria.ui.comics.ComicFragment"
+        android:label="@string/title_comics"
+        tools:layout="@layout/fragment_comic" />
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.swgroup.alexandria.ui.favorites.FavoriteFragment"
+        android:label="@string/title_favorites"
+        tools:layout="@layout/fragment_favorite"/>
+</navigation>

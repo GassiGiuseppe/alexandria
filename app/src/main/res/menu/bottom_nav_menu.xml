@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/ic_bottombar_favorite_24"
+        android:title="@string/title_favorites" />
+
+    <item
+        android:id="@+id/navigation_books"
+        android:icon="@drawable/ic_bottombar_book_24"
+        android:title="@string/title_books" />
+
+    <item
+        android:id="@+id/navigation_audiobooks"
+        android:icon="@drawable/ic_bottombar_audiobook_24"
+        android:title="@string/title_audiobooks" />
+
+    <item
+        android:id="@+id/navigation_comics"
+        android:icon="@drawable/ic_bottombar_comic_24"
+        android:title="@string/title_comics" />
+
+</menu>
