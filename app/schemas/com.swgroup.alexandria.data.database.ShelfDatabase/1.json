@@ -1,0 +1,117 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "5d2dbd191a8989296f4a494f0d2696e8",
+    "entities": [
+      {
+        "tableName": "ShelfEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `author` TEXT, `genre` TEXT, `cover` TEXT, `file` TEXT, `datatype` TEXT, `favorite` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "genre",
+            "columnName": "genre",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cover",
+            "columnName": "cover",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "datatype",
+            "columnName": "datatype",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "favorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_ShelfEntry__id",
+            "unique": false,
+            "columnNames": [
+              "_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ShelfEntry__id` ON `${TABLE_NAME}` (`_id`)"
+          },
+          {
+            "name": "index_ShelfEntry_title",
+            "unique": false,
+            "columnNames": [
+              "title"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ShelfEntry_title` ON `${TABLE_NAME}` (`title`)"
+          },
+          {
+            "name": "index_ShelfEntry_author",
+            "unique": false,
+            "columnNames": [
+              "author"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ShelfEntry_author` ON `${TABLE_NAME}` (`author`)"
+          },
+          {
+            "name": "index_ShelfEntry_genre",
+            "unique": false,
+            "columnNames": [
+              "genre"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ShelfEntry_genre` ON `${TABLE_NAME}` (`genre`)"
+          },
+          {
+            "name": "index_ShelfEntry_datatype",
+            "unique": false,
+            "columnNames": [
+              "datatype"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ShelfEntry_datatype` ON `${TABLE_NAME}` (`datatype`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5d2dbd191a8989296f4a494f0d2696e8')"
+    ]
+  }
+}
