@@ -1,6 +1,10 @@
 package com.swgroup.alexandria.ui.books;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swgroup.alexandria.data.database.ShelfEntry;
+import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.FragmentBookBinding;
 import com.swgroup.alexandria.ui.EntryAdapter;
 import com.swgroup.alexandria.ui.ShelfViewModel;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class BookFragment extends Fragment {

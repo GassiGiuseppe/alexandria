@@ -1,9 +1,12 @@
 package com.swgroup.alexandria;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
@@ -20,7 +23,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityMainBinding;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,6 +84,23 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.titlebar_menu, menu);
         return true;
+    }
+
+    public void onActivityResult(int requestcode, int resulCode, Intent data) {
+        super.onActivityResult(requestcode,resulCode,data);
+        if (resulCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            } Uri uri = data.getData();
+            System.out.println(uri.toString());
+            try {
+                File inputFile = FileUtil.from(MainActivity.this, uri);
+                Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
+                FileUtil.writeToSDFile( MainActivity.this, inputFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
