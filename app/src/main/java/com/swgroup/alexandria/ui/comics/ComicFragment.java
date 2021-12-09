@@ -4,37 +4,49 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.swgroup.alexandria.data.database.ShelfEntry;
 import com.swgroup.alexandria.databinding.FragmentComicBinding;
+import com.swgroup.alexandria.ui.EntryAdapter;
+import com.swgroup.alexandria.ui.ShelfViewModel;
+
+import java.util.List;
 
 public class ComicFragment extends Fragment {
 
-    private ComicViewModel comicViewModel;
+    private ShelfViewModel shelfViewModel;
     private FragmentComicBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        comicViewModel =
-                new ViewModelProvider(this).get(ComicViewModel.class);
 
-        binding = FragmentComicBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        binding = FragmentComicBinding
+                .inflate(inflater, container, false);
 
-        final TextView textView = binding.textComic;
-        comicViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        RecyclerView recyclerView = binding.recyclerViewComics;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+        EntryAdapter entryAdapter = new EntryAdapter();
+        recyclerView.setAdapter(entryAdapter);
+
+        shelfViewModel =
+                new ViewModelProvider(this).get(ShelfViewModel.class);
+        // TODO: Questa è solo una prova, dopo sostituisci per EntryType comic
+        shelfViewModel.getAllEntries().observe(getViewLifecycleOwner(), new Observer<List<ShelfEntry>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(List<ShelfEntry> shelfEntries) {
+                entryAdapter.setEntries(shelfEntries);
             }
         });
-        return root;
+
+        return binding.getRoot();
     }
 
     @Override
