@@ -1,9 +1,13 @@
-package com.swgroup.alexandria.data.database;
+package com.swgroup.alexandria.ui;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.swgroup.alexandria.data.database.EntryType;
+import com.swgroup.alexandria.data.database.ShelfEntry;
+import com.swgroup.alexandria.data.database.ShelfRepository;
 
 import java.util.List;
 
