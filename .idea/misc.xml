@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/drawable-anydpi/ic_book.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/drawable-xhdpi/ic_toolbar_delete_24.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/drawable-xhdpi/ic_toolbar_search_24.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/drawable-xhdpi/ic_toolbar_submenu_credits_24.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/drawable-xhdpi/ic_toolbar_submenu_settings_24.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/layout/fragment_audiobook.xml" value="0.1" />
         <entry key="..\:/Users/ZenoL/AndroidStudioProjects/alexandria/app/src/main/res/layout/fragment_book.xml" value="0.1" />

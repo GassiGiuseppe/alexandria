@@ -7,10 +7,19 @@
     <item
         android:id="@+id/toolbar_menu_credits"
         android:orderInCategory="100"
-        android:title="@string/titlebar_menu_credits" />
+        android:title="@string/titlebar_menu_credits"
+        android:icon="@drawable/ic_toolbar_submenu_credits_24"/>
 
     <item
         android:id="@+id/toolbar_menu_settings"
         android:orderInCategory="100"
-        android:title="@string/titlebar_menu_settings" />
+        android:title="@string/titlebar_menu_settings"
+        android:icon="@drawable/ic_toolbar_submenu_settings_24"/>
+
+    <item
+        android:id="@+id/toolbar_menu_search"
+        android:title="@string/titlebar_menu_search"
+        android:icon="@drawable/ic_toolbar_search_24"
+        app:showAsAction="always" />
+
 </menu>
