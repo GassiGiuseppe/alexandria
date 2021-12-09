@@ -10,4 +10,5 @@
     <string name="cardview_title">Title</string>
     <string name="cardview_author">Author</string>
     <string name="cardview_genre">Genre</string>
+    <string name="ToastMsgStoragePermissionDenied">Permissions Denied, app cannot work</string>
 </resources>
