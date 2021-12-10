@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -23,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.swgroup.alexandria.data.internal.DataScratcher;
 import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityMainBinding;
 
@@ -97,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
                 File inputFile = FileUtil.from(MainActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
                 FileUtil.writeToSDFile( MainActivity.this, inputFile);
+                //prova
+
+               // DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName());
+                // end prova
             } catch (IOException e) {
                 e.printStackTrace();
             }
