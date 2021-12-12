@@ -18,7 +18,10 @@ public class DataScratcher {
         uscita = ingresso.replace("/","_");
         return uscita;
     }
-    public static String getMetaDataFromEpub (String path, String zipname){
+
+
+    private static void createFile (String fileToCreate,String path, String zipname){
+        //THINGS TO DO: make file only if match whit the string
         InputStream is;
         ZipInputStream zis;
         String folderName = null;
@@ -45,12 +48,16 @@ public class DataScratcher {
                 filename = modifyStringforMeta(filename);
                 System.out.println(filename);
                 //
+                // questo if è inutile per adesso
                 if (ze.isDirectory()) {
                     File fmd = new File(path + filename);
                     fmd.mkdirs();
                     continue;
                 }
-
+                //end
+                //
+                //creaFile = checkIfWeNeedToCreateFile(filename,)
+                // qui si mette l'if che controlla che sia il file che a noi interessa
                 FileOutputStream fout = new FileOutputStream(path + filename);
 
                 // cteni zipu a zapis
@@ -67,6 +74,26 @@ public class DataScratcher {
             e.printStackTrace();
         }
 
-        return folderName;
+        //return folderName;
+        return;
+    }
+
+    public static String getMetaDataFromEpub (String path, String zipname){
+        // WHAT TO DO:
+        // 1) FAR CREARE SOLO I FILE CHE CI INTERESSANO
+        //      cosa ci serve?
+        //          content.opf, contiene questo:
+        //          <reference href="Text/9788817027489_epub_cvi_r1.htm" title="Cover" type="cover" />   <-- COVER
+        // 2) FARLI CREARE IN UNA CARTELLA TMP
+        // 3) RECUPERARE I DATI
+        // 4) DISTRUGGERE TUTTO
+
+        String nomeInconpletoCover;
+        Boolean creaFile ; // ci dice se il file verrà creato
+
+        // first time i cancel everything execpt OEBPS_content.opf
+        createFile (null, path,zipname);
+        //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
+        return null;
     }
 }
