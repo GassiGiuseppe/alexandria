@@ -3,13 +3,49 @@ package com.swgroup.alexandria.data.internal;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DataScratcher {
+    private static String scrapeFromFile(File content){
+        // abbiamo in ingresso content.opf
+        LinkedList<String> lista = new LinkedList<>();
+
+
+        //System.out.println(content.canRead()); <-- TRUE
+        try {
+
+            Scanner myReader = new Scanner(content);
+            while (myReader.hasNextLine()) {
+
+                 lista.add(myReader.nextLine());
+              //  System.out.println(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+
+        }
+
+        /// variabili per ricerca
+
+        // end
+        // ogni elemento è una riga
+        for ( String temp: lista) {
+            System.out.println(temp);
+        }
+
+
+
+        return null;
+    }
 
     private static String modifyStringforMeta (String ingresso){
         // se ingresso contiene / allora si toglie
@@ -28,11 +64,12 @@ public class DataScratcher {
         return risultato;
     }
 
-    private static void createFile (String nameWanted,String path, String zipname){
+    private static File createFile (String nameWanted,String path, String zipname){
         //THINGS TO DO: make file only if match whit the string
         InputStream is;
         ZipInputStream zis;
         String folderName = null;
+        File outputFile = null;
         try {
             String filename;
             is = new FileInputStream(path + zipname);
@@ -66,9 +103,9 @@ public class DataScratcher {
                 //
                 //creaFile = checkIfWeNeedToCreateFile(filename,)
                 // qui si mette l'if che controlla che sia il file che a noi interessa
-                System.out.println("un file è passato di qui");
+                //System.out.println("un file è passato di qui");
                 if(checkIfCreate(nameWanted,filename)) {
-                    System.out.println("YAYYY TI STO CREANDO");
+                    //System.out.println("YAYYY TI STO CREANDO");
                     FileOutputStream fout = new FileOutputStream(path + filename);
 
                     // cteni zipu a zapis
@@ -77,7 +114,10 @@ public class DataScratcher {
                     }
 
                     fout.close();
-
+                    outputFile = new File(path+filename);
+                    zis.closeEntry();
+                    zis.close();
+                    return outputFile;
                 }
                 zis.closeEntry();
             }
@@ -88,7 +128,7 @@ public class DataScratcher {
         }
 
         //return folderName;
-        return;
+        return outputFile;
     }
 
     public static String getMetaDataFromEpub (String path, String zipname){
@@ -107,9 +147,16 @@ public class DataScratcher {
         String nomeInconpletoCover;
         Boolean creaFile ; // ci dice se il file verrà creato
         String conteiner = "content.opf";
+        String coverName;
         // first time i cancel everything execpt OEBPS_content.opf
-        createFile (conteiner, path,zipname);
+        File content = createFile (conteiner, path,zipname);
         //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
+        coverName = scrapeFromFile(content);
+
+        //File cover = createFile(coverName,path,zipname);
+
+
+        // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
         return null;
     }
 }
