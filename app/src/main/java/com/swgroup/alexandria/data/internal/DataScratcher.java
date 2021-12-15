@@ -19,8 +19,16 @@ public class DataScratcher {
         return uscita;
     }
 
+    private static Boolean checkIfCreate(String nameWanted, String fileToCreate){
+        boolean risultato = false;
+        // se fileToCreate contiene nameWnted allora risultato true
+        if (fileToCreate.contains(nameWanted)){
+            risultato=true;
+        }
+        return risultato;
+    }
 
-    private static void createFile (String fileToCreate,String path, String zipname){
+    private static void createFile (String nameWanted,String path, String zipname){
         //THINGS TO DO: make file only if match whit the string
         InputStream is;
         ZipInputStream zis;
@@ -58,14 +66,19 @@ public class DataScratcher {
                 //
                 //creaFile = checkIfWeNeedToCreateFile(filename,)
                 // qui si mette l'if che controlla che sia il file che a noi interessa
-                FileOutputStream fout = new FileOutputStream(path + filename);
+                System.out.println("un file è passato di qui");
+                if(checkIfCreate(nameWanted,filename)) {
+                    System.out.println("YAYYY TI STO CREANDO");
+                    FileOutputStream fout = new FileOutputStream(path + filename);
 
-                // cteni zipu a zapis
-                while ((count = zis.read(buffer)) != -1) {
-                    fout.write(buffer, 0, count);
+                    // cteni zipu a zapis
+                    while ((count = zis.read(buffer)) != -1) {
+                        fout.write(buffer, 0, count);
+                    }
+
+                    fout.close();
+
                 }
-
-                fout.close();
                 zis.closeEntry();
             }
 
@@ -82,17 +95,20 @@ public class DataScratcher {
         // WHAT TO DO:
         // 1) FAR CREARE SOLO I FILE CHE CI INTERESSANO
         //      cosa ci serve?
-        //          content.opf, contiene questo:
+        //          content.opf, contiene questo:   <- QUESTO è IL NOME, LASCIA PERDERE LA CARTELLA
         //          <reference href="Text/9788817027489_epub_cvi_r1.htm" title="Cover" type="cover" />   <-- COVER
+        //          <reference href="Text/part0000.html" title="Copertina" type="cover"/>
+
+        //          <item href="cover.jpeg" id="cover" media-type="image/jpeg"/>   NEL TAG MANIFEST
         // 2) FARLI CREARE IN UNA CARTELLA TMP
         // 3) RECUPERARE I DATI
         // 4) DISTRUGGERE TUTTO
 
         String nomeInconpletoCover;
         Boolean creaFile ; // ci dice se il file verrà creato
-
+        String conteiner = "content.opf";
         // first time i cancel everything execpt OEBPS_content.opf
-        createFile (null, path,zipname);
+        createFile (conteiner, path,zipname);
         //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
         return null;
     }
