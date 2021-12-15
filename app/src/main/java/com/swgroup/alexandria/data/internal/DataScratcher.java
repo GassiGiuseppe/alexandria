@@ -35,11 +35,26 @@ public class DataScratcher {
         }
 
         /// variabili per ricerca
-
+        Boolean locatefMetadata = false;
         // end
         // ogni elemento è una riga
         for ( String temp: lista) {
-            System.out.println(temp);
+            if(temp.contains("<metadata")){
+                locatefMetadata=true;
+            }
+            if(temp.contains("</metadata")){
+                locatefMetadata=false;
+            }
+            if(locatefMetadata){
+                if(temp.contains("<meta")){
+                    if(temp.contains("cover")){
+                        //EVVIVA, ABBIAMO TROVATO LA COVER
+                        System.out.println("EVVIVA");
+                        System.out.println(temp);
+                    }
+                }
+            }
+            //System.out.println(temp);
         }
 
 
@@ -89,9 +104,9 @@ public class DataScratcher {
                 // it will generate an Exception...
 
                 //QUI STA IL PROBLEMA, MODIFICARE IL FILENAME
-                System.out.println(filename);
+                //System.out.println(filename);
                 filename = modifyStringforMeta(filename);
-                System.out.println(filename);
+                //System.out.println(filename);
                 //
                 // questo if è inutile per adesso
                 if (ze.isDirectory()) {
