@@ -69,6 +69,7 @@ dependencies {
 }
 
 dependencies {
+    //implementation 'org.apache.tika:tika-parsers:1.14'
     implementation files('libs/skyepub.jar')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'

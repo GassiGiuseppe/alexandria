@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -109,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);
                 // end
                 //insecure state
-
+                shelfViewModel = new ViewModelProvider(this).get(ShelfViewModel.class);
+                shelfViewModel.insert(shelfEntry);
                 //end
 
 
