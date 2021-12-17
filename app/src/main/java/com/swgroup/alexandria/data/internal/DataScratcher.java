@@ -248,7 +248,7 @@ public class DataScratcher {
         copyOfEpub.renameTo(new File(path+shelfEntry.title+"."+parts1[1]));
         //end
         shelfEntry.setFile(copyOfEpub.getName());
-        shelfEntry.setCover(cover.getName());
+        shelfEntry.setCover(shelfEntry.title+"Cover"+"."+parts[1]);
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
         return null;

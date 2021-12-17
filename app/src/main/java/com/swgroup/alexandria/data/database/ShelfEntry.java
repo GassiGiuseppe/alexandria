@@ -56,11 +56,12 @@ public class ShelfEntry {
         this.title = title;
         this.author = author;
         this.genre = genre;
+       // this.cover = " ";
     }
 
     @Ignore
     public ShelfEntry(){
-
+        //this.cover = " ";
     }
 
     public String getTitle() {

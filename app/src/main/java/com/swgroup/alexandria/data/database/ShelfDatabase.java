@@ -36,7 +36,7 @@ public abstract class ShelfDatabase extends RoomDatabase {
         if (Instance == null) {
             Instance = Room
                     .databaseBuilder(context.getApplicationContext(), ShelfDatabase.class, NAME)
-                    .fallbackToDestructiveMigration()
+                    //.fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build();
         }

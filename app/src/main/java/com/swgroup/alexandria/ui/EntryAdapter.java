@@ -1,5 +1,9 @@
 package com.swgroup.alexandria.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +17,11 @@ import com.swgroup.alexandria.R;
 import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder> {
     private List<ShelfEntry> entries = new ArrayList<>();
@@ -34,6 +41,18 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
         holder.textViewTitle.setText(currentEntry.getTitle());
         holder.textViewAuthor.setText(currentEntry.getAuthor());
         holder.textViewGenre.setText(currentEntry.getGenre());
+        //qui gli diamo la view
+        // curretEntry.cover ->
+        //          -> file
+        //holder.imageViewCover.;
+        if(!(currentEntry.cover==null)){
+            File tmp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+currentEntry.getCover());
+           // Uri uri = (Uri) tmp.toURI();
+
+            Bitmap bitmap = BitmapFactory.decodeFile(tmp.getPath());
+           // holder.imageViewCover.setImageURI(uri);
+            holder.imageViewCover.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -75,6 +94,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
     }
 
     public interface onItemClickListener {
+
         void onItemClick(ShelfEntry shelfEntry);
     }
 
