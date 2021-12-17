@@ -80,7 +80,6 @@ public class ShelfFragment extends Fragment {
                             entry.setFavorite(false);
                             shelfViewModel.update(entry);
                         });
-                        alertDiag.show();
                     } else {
                         alertDiag.setTitle("Mark favorite");
                         alertDiag.setMessage("Do you want to add this entry to the favorites?");
@@ -89,8 +88,8 @@ public class ShelfFragment extends Fragment {
                             entry.setFavorite(true);
                             shelfViewModel.update(entry);
                         });
-                        alertDiag.show();
                     }
+                    alertDiag.show();
 
                 }
             }
