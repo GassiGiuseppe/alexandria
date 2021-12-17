@@ -17,7 +17,7 @@ public class DataScratcher {
     private static String scrapeFromFile(File content){
         // abbiamo in ingresso content.opf
         LinkedList<String> lista = new LinkedList<>();
-
+        String output = null;
 
         //System.out.println(content.canRead()); <-- TRUE
         try {
@@ -49,8 +49,20 @@ public class DataScratcher {
                 if(temp.contains("<meta")){
                     if(temp.contains("cover")){
                         //EVVIVA, ABBIAMO TROVATO LA COVER
-                        System.out.println("EVVIVA");
-                        System.out.println(temp);
+                        //System.out.println("EVVIVA");
+                        //System.out.println(temp);
+
+                        String [] parts = temp.split("\"");
+                        String cover1 = parts[1];
+                        String cover2 = parts[3];
+                        //System.out.println(cover1);
+                        //System.out.println(cover2);
+                        if(cover1.equals("cover")){
+                            output = cover2;
+                        } else {
+                            output = cover1;
+                        }
+                        System.out.println(output);
                     }
                 }
             }
@@ -59,7 +71,7 @@ public class DataScratcher {
 
 
 
-        return null;
+        return output;
     }
 
     private static String modifyStringforMeta (String ingresso){
