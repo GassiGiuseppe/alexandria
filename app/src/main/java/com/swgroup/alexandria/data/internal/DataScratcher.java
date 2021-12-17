@@ -232,12 +232,23 @@ public class DataScratcher {
         coverName = scrapeFromFile(content,shelfEntry);
 
 
-        System.out.println(coverName);
+        //System.out.println(coverName);
 
         File cover = createFile(coverName,path,zipname);
         // destroy container
         content.delete();
+        //rename cover as titolo+cover
+        String [] parts = coverName.split("\\.");
 
+        cover.renameTo(new File(path+shelfEntry.title+"Cover"+"."+parts[1]));
+        //cover.ren
+        //rename epub as title
+        File copyOfEpub = new File(path+zipname);
+        String [] parts1 = zipname.split("\\.");
+        copyOfEpub.renameTo(new File(path+shelfEntry.title+"."+parts1[1]));
+        //end
+        shelfEntry.setFile(copyOfEpub.getName());
+        shelfEntry.setCover(cover.getName());
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
         return null;

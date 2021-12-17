@@ -103,12 +103,16 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(uri.toString());
             try {
                 File inputFile = FileUtil.from(MainActivity.this, uri);
-                Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
+                //Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
                 FileUtil.writeToSDFile( MainActivity.this, inputFile);
                 //data scratching
                 ShelfEntry shelfEntry = new ShelfEntry();
                 DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);
                 // end
+                // rename inputfile as title of the book
+                //String [] parts = inputFile.getName().split("\\.");
+                //inputFile.renameTo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+shelfEntry.title+"."+parts[parts.length-1]));
+                //end
                 //insecure state
                 shelfViewModel = new ViewModelProvider(this).get(ShelfViewModel.class);
                 shelfViewModel.insert(shelfEntry);
