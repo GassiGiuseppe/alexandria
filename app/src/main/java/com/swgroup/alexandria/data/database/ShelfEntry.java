@@ -58,6 +58,11 @@ public class ShelfEntry {
         this.genre = genre;
     }
 
+    @Ignore
+    public ShelfEntry(){
+
+    }
+
     public String getTitle() {
         return title;
     }

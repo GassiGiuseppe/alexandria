@@ -24,9 +24,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.swgroup.alexandria.data.database.ShelfEntry;
 import com.swgroup.alexandria.data.internal.DataScratcher;
 import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityMainBinding;
+import com.swgroup.alexandria.ui.ShelfViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,9 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    //insecure state
+    private ShelfViewModel shelfViewModel;
+    //end
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +104,14 @@ public class MainActivity extends AppCompatActivity {
                 File inputFile = FileUtil.from(MainActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
                 FileUtil.writeToSDFile( MainActivity.this, inputFile);
-                //prova
+                //data scratching
                 ShelfEntry shelfEntry = new ShelfEntry();
                 DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);
+                // end
+                //insecure state
 
-                // end prova
+                //end
+
 
             } catch (IOException e) {
                 e.printStackTrace();
