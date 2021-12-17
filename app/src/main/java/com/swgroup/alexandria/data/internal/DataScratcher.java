@@ -1,5 +1,7 @@
 package com.swgroup.alexandria.data.internal;
 
+import com.swgroup.alexandria.data.database.ShelfEntry;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,12 +11,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DataScratcher {
-    private static String scrapeFromFile(File content){
+    private static String scrapeFromFile(File content, ShelfEntry shelfEntry){
+        String autore = null;
+        String titolo = null;
+        String genere = "";
+
         // abbiamo in ingresso content.opf
         LinkedList<String> lista = new LinkedList<>();
         String output = null;
@@ -36,15 +43,22 @@ public class DataScratcher {
 
         /// variabili per ricerca
         Boolean locatefMetadata = false;
+        Boolean locatefManifest = false;
         // end
         // ogni elemento è una riga
         for ( String temp: lista) {
             if(temp.contains("<metadata")){
                 locatefMetadata=true;
-            }
-            if(temp.contains("</metadata")){
+            }else if(temp.contains("</metadata")){
                 locatefMetadata=false;
             }
+
+            if(temp.contains("<manifest")){
+                locatefManifest=true;
+            }else if(temp.contains("</manifest")){
+                locatefManifest=false;
+            }
+
             if(locatefMetadata){
                 if(temp.contains("<meta")){
                     if(temp.contains("cover")){
@@ -62,14 +76,51 @@ public class DataScratcher {
                         } else {
                             output = cover1;
                         }
-                        System.out.println(output);
+                        //System.out.println(output);
+                    }
+                } else if(temp.contains("<dc")){
+                    if(temp.contains("<dc:title>")){
+                        //scraping titolo
+                        String [] parts = temp.split(">");
+                        String partialAuthor = parts[1];
+                        String [] parts1 = partialAuthor.split("<");
+                        titolo = parts1[0];
+                    }else if(temp.contains("<dc:creator")){
+                        //scraping autore
+                        String [] parts = temp.split(">");
+                        String partialAuthor = parts[1];
+                        String [] parts1 = partialAuthor.split("<");
+                        autore = parts1[0];
+                    }else if(temp.contains("<dc:subject>")){
+                        //scraping genere
+                        if(genere==""){
+                            String [] parts = temp.split(">");
+                            String partialAuthor = parts[1];
+                            String [] parts1 = partialAuthor.split("<");
+                            genere = parts1[0];
+                        }
+                    }
+                }
+            }
+
+            if(locatefManifest){
+                if(temp.contains(output)){
+                    String [] parts = temp.split(" ");
+                    for (String parola: parts) {
+                        if(parola.contains("href")){
+                            String [] sottoparte = temp.split("\"");
+                            output = sottoparte[1];
+                        }
                     }
                 }
             }
             //System.out.println(temp);
         }
 
-
+        //System.out.println(autore+"\n"+titolo+"\n"+genere);
+        shelfEntry.setAuthor(autore);
+        shelfEntry.setTitle(titolo);
+        shelfEntry.setGenre(genere);
 
         return output;
     }
@@ -158,7 +209,7 @@ public class DataScratcher {
         return outputFile;
     }
 
-    public static String getMetaDataFromEpub (String path, String zipname){
+    public static String getMetaDataFromEpub (String path, String zipname, ShelfEntry shelfEntry){
         // WHAT TO DO:
         // 1) FAR CREARE SOLO I FILE CHE CI INTERESSANO
         //      cosa ci serve?
@@ -178,9 +229,14 @@ public class DataScratcher {
         // first time i cancel everything execpt OEBPS_content.opf
         File content = createFile (conteiner, path,zipname);
         //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
-        coverName = scrapeFromFile(content);
+        coverName = scrapeFromFile(content,shelfEntry);
 
-        //File cover = createFile(coverName,path,zipname);
+
+        System.out.println(coverName);
+
+        File cover = createFile(coverName,path,zipname);
+        // destroy container
+        content.delete();
 
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS

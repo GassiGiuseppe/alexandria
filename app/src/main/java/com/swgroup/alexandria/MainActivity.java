@@ -100,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("file", "File...:::: uti - "+inputFile .getPath()+" file -" + inputFile + " : " + inputFile .exists());
                 FileUtil.writeToSDFile( MainActivity.this, inputFile);
                 //prova
+                ShelfEntry shelfEntry = new ShelfEntry();
+                DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);
 
-               // DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName());
                 // end prova
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
