@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
+import com.swgroup.alexandria.data.database.ShelfEntry;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +22,24 @@ public class FileUtil{
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     private FileUtil() {    }
+
+    private static void destroyFile(String filePath){
+        try{
+            File file = new File(filePath);
+            file.delete();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    public static void deleteBookFile(ShelfEntry shelfEntry){
+        destroyFile(shelfEntry.getFile());
+        if((shelfEntry.cover!=null)&&(shelfEntry.cover!="ic_cover_not_found.png")){
+            destroyFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+shelfEntry.cover);
+        }
+        return;
+    }
 
     public static File from(Context context, Uri uri) throws IOException {
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
@@ -96,7 +116,7 @@ public class FileUtil{
         return newFile;
     }
 
-    private static long copy(InputStream input, OutputStream output) throws IOException {
+    public static long copy(InputStream input, OutputStream output) throws IOException {
         long count = 0;
         int n;
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
@@ -165,6 +185,7 @@ public class FileUtil{
             return true;
         }else{
             System.out.println("LA CARTELLA NON ERA PRESENTE ED SARA' CREATA");
+
             return false;
         }
     }

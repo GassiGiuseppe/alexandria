@@ -24,7 +24,7 @@ import com.swgroup.alexandria.init.SplashActivity;
 import com.swgroup.alexandria.ui.EntryAdapter;
 import com.swgroup.alexandria.ui.ShelfViewModel;
 import com.swgroup.alexandria.ui.reader.ReaderActivity;
-
+import com.swgroup.alexandria.data.internal.FileUtil;
 public class ShelfFragment extends Fragment {
 
     protected ShelfViewModel shelfViewModel;
@@ -69,7 +69,12 @@ public class ShelfFragment extends Fragment {
                     alertDiag.setTitle("Shelf Entry Deletion");
                     alertDiag.setMessage("Do you really want to delete this entry? It will be lost forever!");
                     alertDiag.setIcon(android.R.drawable.ic_dialog_alert);
-                    alertDiag.setPositiveButton(android.R.string.yes, (dialog, whichButton) -> shelfViewModel.delete(entryAdapter.getEntryAt(viewHolder.getAdapterPosition())));
+                    alertDiag.setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                        FileUtil.deleteBookFile(entryAdapter.getEntryAt(viewHolder.getAdapterPosition()));
+                        //entryAdapter.getEntryAt(viewHolder.getAdapterPosition());///QUI
+
+                        shelfViewModel.delete(entryAdapter.getEntryAt(viewHolder.getAdapterPosition()));
+                    });
                     alertDiag.setNegativeButton(android.R.string.no, (dialogInterface, whichButton) -> recyclerView.setAdapter(entryAdapter));
                     alertDiag.show();
                 }
@@ -86,6 +91,7 @@ public class ShelfFragment extends Fragment {
                             entry.setFavorite(false);
                             shelfViewModel.update(entry);
                         });
+
                     } else {
                         alertDiag.setTitle("Mark favorite");
                         alertDiag.setMessage("Do you want to add this entry to the favorites?");
