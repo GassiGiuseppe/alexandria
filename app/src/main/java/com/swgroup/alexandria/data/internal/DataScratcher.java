@@ -257,7 +257,7 @@ public class DataScratcher {
         String [] parts1 = zipname.split("\\.");
         copyOfEpub.renameTo(new File(path+shelfEntry.title+"."+parts1[1]));
         //end
-        shelfEntry.setFile(copyOfEpub.getName());
+        shelfEntry.setFile(path+shelfEntry.title+"."+parts1[1]);
 
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
