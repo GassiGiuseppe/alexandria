@@ -68,6 +68,7 @@ dependencies {
 }
 
 dependencies {
+    implementation 'ru.bartwell:exfilepicker:2.1'
     implementation files('libs\\slf4j-android-1.5.8.jar')
     implementation files('libs\\epublib-core-latest.jar')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

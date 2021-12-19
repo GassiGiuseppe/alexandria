@@ -228,7 +228,7 @@ public class DataScratcher {
 
         String nomeInconpletoCover;
         Boolean creaFile ; // ci dice se il file verrà creato
-        String conteiner = "content.opf";
+        String conteiner = ".opf";
         String coverName = null;
         // first time i cancel everything execpt OEBPS_content.opf
         File content = createFile (conteiner, path,zipname);

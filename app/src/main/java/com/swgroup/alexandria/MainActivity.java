@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 //insecure state
                 shelfViewModel = new ViewModelProvider(this).get(ShelfViewModel.class);
                 shelfViewModel.insert(shelfEntry);
-                //end
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
