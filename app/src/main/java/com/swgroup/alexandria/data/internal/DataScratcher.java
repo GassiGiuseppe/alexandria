@@ -247,6 +247,8 @@ public class DataScratcher {
             System.out.println(pathname);
             cover.renameTo(new File(pathname));
             shelfEntry.setCover(shelfEntry.title+"Cover"+"."+parts[1]);
+        }else{
+            shelfEntry.setCover("ic_cover_not_found.png");
         }
         //cover.ren
         // destroy container
