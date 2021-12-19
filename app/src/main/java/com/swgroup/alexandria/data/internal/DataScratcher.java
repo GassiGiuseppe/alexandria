@@ -25,6 +25,7 @@ public class DataScratcher {
         // abbiamo in ingresso content.opf
         LinkedList<String> lista = new LinkedList<>();
         String output = null;
+        String outputFinale= null;
 
         //System.out.println(content.canRead()); <-- TRUE
         try {
@@ -109,7 +110,7 @@ public class DataScratcher {
                     for (String parola: parts) {
                         if(parola.contains("href")){
                             String [] sottoparte = temp.split("\"");
-                            output = sottoparte[1];
+                            outputFinale = sottoparte[1];
                         }
                     }
                 }
@@ -122,7 +123,7 @@ public class DataScratcher {
         shelfEntry.setTitle(titolo);
         shelfEntry.setGenre(genere);
 
-        return output;
+        return outputFinale;
     }
 
     private static String modifyStringforMeta (String ingresso){
@@ -225,7 +226,7 @@ public class DataScratcher {
         String nomeInconpletoCover;
         Boolean creaFile ; // ci dice se il file verrà creato
         String conteiner = "content.opf";
-        String coverName;
+        String coverName = null;
         // first time i cancel everything execpt OEBPS_content.opf
         File content = createFile (conteiner, path,zipname);
         //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
@@ -233,22 +234,28 @@ public class DataScratcher {
 
 
         //System.out.println(coverName);
+        if(coverName!=null) {
+            coverName = modifyStringforMeta(coverName);
+            System.out.println(coverName);
+            File cover = createFile(coverName, path, zipname);
 
-        File cover = createFile(coverName,path,zipname);
+            String[] parts = coverName.split("\\.");
+            String pathname = path + shelfEntry.title + "Cover" + "." + parts[1];
+            System.out.println(pathname);
+            cover.renameTo(new File(pathname));
+            shelfEntry.setCover(shelfEntry.title+"Cover"+"."+parts[1]);
+        }
+        //cover.ren
         // destroy container
         content.delete();
         //rename cover as titolo+cover
-        String [] parts = coverName.split("\\.");
-
-        cover.renameTo(new File(path+shelfEntry.title+"Cover"+"."+parts[1]));
-        //cover.ren
         //rename epub as title
         File copyOfEpub = new File(path+zipname);
         String [] parts1 = zipname.split("\\.");
         copyOfEpub.renameTo(new File(path+shelfEntry.title+"."+parts1[1]));
         //end
         shelfEntry.setFile(copyOfEpub.getName());
-        shelfEntry.setCover(shelfEntry.title+"Cover"+"."+parts[1]);
+
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
         return null;
