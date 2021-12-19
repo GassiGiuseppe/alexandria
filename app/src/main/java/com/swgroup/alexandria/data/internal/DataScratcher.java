@@ -253,11 +253,19 @@ public class DataScratcher {
         content.delete();
         //rename cover as titolo+cover
         //rename epub as title
-        File copyOfEpub = new File(path+zipname);
-        String [] parts1 = zipname.split("\\.");
-        copyOfEpub.renameTo(new File(path+shelfEntry.title+"."+parts1[1]));
-        //end
-        shelfEntry.setFile(path+shelfEntry.title+"."+parts1[1]);
+        File copyOfEpub = new File(path + zipname);
+        if(shelfEntry.title!=null) {
+
+            String[] parts1 = zipname.split("\\.");
+            copyOfEpub.renameTo(new File(path + shelfEntry.title + "." + parts1[1]));
+            //end
+            shelfEntry.setFile(path + shelfEntry.title + "." + parts1[1]);
+        }else{
+            String[] parts1 = zipname.split("\\.");
+            shelfEntry.title=parts1[0];
+            shelfEntry.setFile(path+zipname);
+        }
+
 
 
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
