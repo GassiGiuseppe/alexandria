@@ -198,7 +198,6 @@ public class ReaderActivity extends AppCompatActivity {
                         }catch(Exception e){e.printStackTrace();}
                         if(ChapterNumber>=0&&!SelectedText.equals("")&&!DataString.equals("")) {
                             //Save ChapterNumber,DataString,Color,BookLocation etc in database/Server to recreate highlight
-                            //Toast.makeText(context, "TODO:Selected highlight:" + SelectedText, Toast.LENGTH_LONG).show();
                             if(ChapterNumber==ePubReader.GetChapterNumber())//Verify ChanpterNumber and BookLocation before suing highlight
                                 ePubReader.Annotate(DataString,ePubReader.METHOD_UNDERLINE,"#ef9a9a");
                         }

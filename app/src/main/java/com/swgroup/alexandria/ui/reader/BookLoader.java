@@ -3,8 +3,6 @@ package com.swgroup.alexandria.ui.reader;
 import android.content.Intent;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import com.swgroup.alexandria.R;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,13 +16,8 @@ public class BookLoader extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_loader);
-        Button browse_files = (Button) findViewById(R.id.browse_files);
-        browse_files.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenFileManager();
-            }
-        });
+        Button browse_files = findViewById(R.id.browse_files);
+        browse_files.setOnClickListener(v -> OpenFileManager());
         OpenFileManager();
     }
     public void OpenFileManager(){
