@@ -54,6 +54,7 @@ public class DataScratcher {
                 locatefMetadata=false;
             }
 
+
             if(temp.contains("<manifest")){
                 locatefManifest=true;
             }else if(temp.contains("</manifest")){
@@ -105,12 +106,14 @@ public class DataScratcher {
             }
 
             if(locatefManifest){
-                if(temp.contains(output)){
-                    String [] parts = temp.split(" ");
-                    for (String parola: parts) {
-                        if(parola.contains("href")){
-                            String [] sottoparte = temp.split("\"");
-                            outputFinale = sottoparte[1];
+                if (output!=null) {
+                    if (temp.contains(output)) {
+                        String[] parts = temp.split(" ");
+                        for (String parola : parts) {
+                            if (parola.contains("href")) {
+                                String[] sottoparte = temp.split("\"");
+                                outputFinale = sottoparte[1];
+                            }
                         }
                     }
                 }
