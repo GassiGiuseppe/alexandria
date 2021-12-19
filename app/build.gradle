@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
@@ -69,8 +68,8 @@ dependencies {
 }
 
 dependencies {
-    //implementation 'org.apache.tika:tika-parsers:1.14'
-    implementation files('libs/skyepub.jar')
+    implementation files('libs\\slf4j-android-1.5.8.jar')
+    implementation files('libs\\epublib-core-latest.jar')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'

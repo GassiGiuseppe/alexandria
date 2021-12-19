@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 shelfViewModel.insert(shelfEntry);
                 //end
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

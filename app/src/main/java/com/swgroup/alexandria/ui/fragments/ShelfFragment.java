@@ -58,7 +58,7 @@ public class ShelfFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if(direction == ItemTouchHelper.LEFT) {
+                if(direction == ItemTouchHelper.RIGHT) {
                     alertDiag = new AlertDialog.Builder(getContext());
                     alertDiag.setTitle("Shelf Entry Deletion");
                     alertDiag.setMessage("Do you really want to delete this entry? It will be lost forever!");
@@ -67,18 +67,30 @@ public class ShelfFragment extends Fragment {
                     alertDiag.setNegativeButton(android.R.string.no, (dialogInterface, whichButton) -> recyclerView.setAdapter(entryAdapter));
                     alertDiag.show();
                 }
-                else if (direction == ItemTouchHelper.RIGHT) {
+                else if (direction == ItemTouchHelper.LEFT) {
                     alertDiag = new AlertDialog.Builder(getContext());
-                    alertDiag.setTitle("Mark as Favorite");
-                    alertDiag.setMessage("Do you want to mark this entry as favorite?");
                     alertDiag.setIcon(android.R.drawable.ic_dialog_alert);
-                    alertDiag.setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                        ShelfEntry entry = entryAdapter.getEntryAt(viewHolder.getAdapterPosition());
-                        entry.setFavorite(true);
-                        shelfViewModel.update(entry);
-                    });
                     alertDiag.setNegativeButton(android.R.string.no, (dialogInterface, whichButton) -> recyclerView.setAdapter(entryAdapter));
+
+                    if(entryAdapter.getEntryAt(viewHolder.getAdapterPosition()).getFavorite()) {
+                        alertDiag.setTitle("Unmark favorite");
+                        alertDiag.setMessage("Do you want to remove this entry from the favorites?");
+                        alertDiag.setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            ShelfEntry entry = entryAdapter.getEntryAt(viewHolder.getAdapterPosition());
+                            entry.setFavorite(false);
+                            shelfViewModel.update(entry);
+                        });
+                    } else {
+                        alertDiag.setTitle("Mark favorite");
+                        alertDiag.setMessage("Do you want to add this entry to the favorites?");
+                        alertDiag.setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            ShelfEntry entry = entryAdapter.getEntryAt(viewHolder.getAdapterPosition());
+                            entry.setFavorite(true);
+                            shelfViewModel.update(entry);
+                        });
+                    }
                     alertDiag.show();
+
                 }
             }
         }).attachToRecyclerView(recyclerView);
