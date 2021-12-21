@@ -32,11 +32,21 @@
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/drawable/ic_bottombar_book_24.xml" value="0.2890625" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/drawable/ic_bottombar_comic_24.xml" value="0.2890625" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2890625" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/drawable/ic_round_trip_origin_24.xml" value="0.29739583333333336" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/drawable/ic_toolbar_favorite_24.xml" value="0.2890625" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/activity_book_loader.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/activity_main.xml" value="0.33489583333333334" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/activity_player.xml" value="0.28125" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/activity_reader.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/activity_splash.xml" value="0.33489583333333334" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/audio_player_chapter_item.xml" value="0.28125" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/entry_card_item.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/fragment_audiobook.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/fragment_audiobook.xml" value="0.1" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/fragment_book.xml" value="0.33489583333333334" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/fragment_comic.xml" value="0.33489583333333334" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/layout/fragment_favorite.xml" value="0.28125" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/menu/bottom_nav_menu.xml" value="0.28125" />
+        <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/menu/titlebar_menu.xml" value="0.28125" />
         <entry key="..\:/Users/salze/StudioProjects/alexandria/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2890625" />
       </map>
     </option>

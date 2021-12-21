@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.swgroup.alexandria.PlayerActivity;
+import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.FragmentBookBinding;
@@ -105,13 +107,20 @@ public class ShelfFragment extends Fragment {
         }).attachToRecyclerView(recyclerView);
 
         entryAdapter.setOnClickListener(shelfEntry -> {
-            System.out.println(shelfEntry.getFile());
-            Intent intent = new Intent(getActivity() , ReaderActivity.class);
-            intent.putExtra("epub_location", shelfEntry.getFile());
-            startActivity(intent);
-            Toast.makeText(getActivity(), shelfEntry.getTitle(), Toast.LENGTH_LONG).show();
+            if (shelfEntry.datatype==EntryType.Book){
+                System.out.println("SHELF ENTRY BOOK");
+                Intent intent = new Intent(getActivity() , ReaderActivity.class);
+                intent.putExtra("epub_location", shelfEntry.getFile());
+                System.out.println("FILE:  :::: BOOK" + shelfEntry.getFile());
+                startActivity(intent);
+            } else if(shelfEntry.datatype==EntryType.Audiobook){
+                System.out.println("SHELF ENTRY AUDIO");
+                Intent intent = new Intent(getActivity() , PlayerActivity.class);
+                intent.putExtra("audio_location", shelfEntry.getFile());
+                System.out.println("FILE:  :::: AUDIO" + shelfEntry.getFile());
+                startActivity(intent);
+            }
         });
-
         return binding.getRoot();
     }
 

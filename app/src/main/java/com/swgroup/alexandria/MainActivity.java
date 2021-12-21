@@ -22,7 +22,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
+import com.swgroup.alexandria.data.internal.AudioUtil;
 import com.swgroup.alexandria.data.internal.DataScratcher;
 import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityMainBinding;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/epub+zip");
+            intent.setType("application/*");
             startActivityForResult(intent, 1);
         });
     }
@@ -102,8 +104,20 @@ public class MainActivity extends AppCompatActivity {
                 FileUtil.writeToSDFile( MainActivity.this, inputFile);
                 //data scratching
                 ShelfEntry shelfEntry = new ShelfEntry();
-                DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);
-                // end
+                //TODO METODO ALTERNATIVO IN BASE AL FILE MIMETYPE
+                if(inputFile.getPath().contains(".epub")){
+                    System.out.println("SOUT EPUB" +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
+                    shelfEntry.datatype= EntryType.Book;
+                    DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);}
+                else{
+                    //DEBUG ONLY
+                    System.out.println("SOUT AUDIOBOOK " +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
+                    //END DEBUG ONLY
+                    shelfEntry.datatype=EntryType.Audiobook;
+                    shelfEntry.setTitle(inputFile.getName());
+                    shelfEntry.setFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
+                    AudioUtil allEntries = new AudioUtil(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName(), this);
+                }
                 // rename inputfile as title of the book
                 //String [] parts = inputFile.getName().split("\\.");
                 //inputFile.renameTo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+shelfEntry.title+"."+parts[parts.length-1]));

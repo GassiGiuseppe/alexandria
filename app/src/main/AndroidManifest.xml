@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alexandria">
         <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.reader.BookLoader"
             android:exported="false" />
         <activity

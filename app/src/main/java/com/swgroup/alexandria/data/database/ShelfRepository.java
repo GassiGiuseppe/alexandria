@@ -14,7 +14,6 @@ public class ShelfRepository {
 
     public ShelfRepository(Application application) {
         ShelfDatabase shelfDatabase = ShelfDatabase.getInstance(application);
-
         shelfDAO = shelfDatabase.shelfDao();
         allEntries = shelfDAO.getAll();
     }

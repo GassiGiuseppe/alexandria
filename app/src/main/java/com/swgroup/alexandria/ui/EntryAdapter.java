@@ -76,7 +76,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
         private TextView textViewGenre;
         private ImageView imageViewCover;
 
-        public EntryHolder(View itemView) {
+        protected EntryHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.card_text_view_title);
             textViewAuthor = itemView.findViewById(R.id.card_text_view_author);
