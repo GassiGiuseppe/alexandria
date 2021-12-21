@@ -10,8 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -43,8 +41,8 @@ public class DataScratcher {
         }
 
         /// variabili per ricerca
-        Boolean locatefMetadata = false;
-        Boolean locatefManifest = false;
+        boolean locatefMetadata = false;
+        boolean locatefManifest = false;
         // end
         // ogni elemento è una riga
         for ( String temp: lista) {
@@ -95,7 +93,7 @@ public class DataScratcher {
                         autore = parts1[0];
                     }else if(temp.contains("<dc:subject>")){
                         //scraping genere
-                        if(genere==""){
+                        if(genere.equals("")){
                             String [] parts = temp.split(">");
                             String partialAuthor = parts[1];
                             String [] parts1 = partialAuthor.split("<");
@@ -131,10 +129,8 @@ public class DataScratcher {
 
     private static String modifyStringforMeta (String ingresso){
         // se ingresso contiene / allora si toglie
-        String uscita = null;
         // example: META-INF/com.apple.ibooks.display-options.xml
-        uscita = ingresso.replace("/","_");
-        return uscita;
+        return ingresso.replace("/","_");
     }
 
     private static Boolean checkIfCreate(String nameWanted, String fileToCreate){
@@ -150,7 +146,6 @@ public class DataScratcher {
         //THINGS TO DO: make file only if match whit the string
         InputStream is;
         ZipInputStream zis;
-        String folderName = null;
         File outputFile = null;
         try {
             String filename;
@@ -164,7 +159,6 @@ public class DataScratcher {
                 // zapis do souboru
                 filename = ze.getName();
                 if (firstLoop) {
-                    folderName = filename;
                     firstLoop = false;
                 }
                 // Need to create directories if not exists, or
@@ -174,15 +168,13 @@ public class DataScratcher {
                 //System.out.println(filename);
                 filename = modifyStringforMeta(filename);
                 //System.out.println(filename);
-                //
                 // questo if è inutile per adesso
+                /*
                 if (ze.isDirectory()) {
                     File fmd = new File(path + filename);
                     fmd.mkdirs();
                     continue;
-                }
-                //end
-                //
+                }*/
                 //creaFile = checkIfWeNeedToCreateFile(filename,)
                 // qui si mette l'if che controlla che sia il file che a noi interessa
                 //System.out.println("un file è passato di qui");
@@ -213,7 +205,7 @@ public class DataScratcher {
         return outputFile;
     }
 
-    public static String getMetaDataFromEpub (String path, String zipname, ShelfEntry shelfEntry){
+    public static void getMetaDataFromEpub (String path, String zipname, ShelfEntry shelfEntry){
         // WHAT TO DO:
         // 1) FAR CREARE SOLO I FILE CHE CI INTERESSANO
         //      cosa ci serve?
@@ -226,14 +218,12 @@ public class DataScratcher {
         // 3) RECUPERARE I DATI
         // 4) DISTRUGGERE TUTTO
 
-        String nomeInconpletoCover;
-        Boolean creaFile ; // ci dice se il file verrà creato
+        // ci dice se il file verrà creato
         String conteiner = ".opf";
-        String coverName = null;
         // first time i cancel everything execpt OEBPS_content.opf
         File content = createFile (conteiner, path,zipname);
         //then i get metadata from content and in the end i restarc createfile but this time i will create the jpg file
-        coverName = scrapeFromFile(content,shelfEntry);
+        String coverName = scrapeFromFile(content,shelfEntry);
 
 
         //System.out.println(coverName);
@@ -256,21 +246,15 @@ public class DataScratcher {
         //rename cover as titolo+cover
         //rename epub as title
         File copyOfEpub = new File(path + zipname);
+        String[] parts1 = zipname.split("\\.");
         if(shelfEntry.title!=null) {
-
-            String[] parts1 = zipname.split("\\.");
             copyOfEpub.renameTo(new File(path + shelfEntry.title + "." + parts1[1]));
             //end
             shelfEntry.setFile(path + shelfEntry.title + "." + parts1[1]);
         }else{
-            String[] parts1 = zipname.split("\\.");
             shelfEntry.title=parts1[0];
             shelfEntry.setFile(path+zipname);
         }
-
-
-
         // IN THE END WE HAVE CREATED ONLY THOSE TWO FILE AND WE HAVE THE POINTERS
-        return null;
     }
 }

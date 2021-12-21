@@ -30,15 +30,13 @@ public class FileUtil{
         }catch(Exception e){
             e.printStackTrace();
         }
-        return;
     }
 
     public static void deleteBookFile(ShelfEntry shelfEntry){
         destroyFile(shelfEntry.getFile());
-        if((shelfEntry.cover!=null)&&(shelfEntry.cover!="ic_cover_not_found.png")){
+        if((shelfEntry.cover!=null)&&(!shelfEntry.cover.equals("ic_cover_not_found.png"))){
             destroyFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+shelfEntry.cover);
         }
-        return;
     }
 
     public static File from(Context context, Uri uri) throws IOException {
@@ -80,17 +78,12 @@ public class FileUtil{
     protected static String getFileName(Context context, Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
             }
         }
         if (result == null) {
@@ -138,10 +131,6 @@ public class FileUtil{
         } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
             // Can only read the media
             mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            // Can't read or write
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
         System.out.println("\n\nExternal Media: readable="
                 +mExternalStorageAvailable+" writable="+mExternalStorageWriteable);

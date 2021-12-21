@@ -7,9 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,7 +22,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 import com.swgroup.alexandria.data.internal.DataScratcher;
 import com.swgroup.alexandria.data.internal.FileUtil;
@@ -37,9 +34,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    //insecure state
     private ShelfViewModel shelfViewModel;
-    //end
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

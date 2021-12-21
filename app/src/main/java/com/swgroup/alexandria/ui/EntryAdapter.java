@@ -2,7 +2,6 @@ package com.swgroup.alexandria.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swgroup.alexandria.R;
-import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder> {
     private List<ShelfEntry> entries = new ArrayList<>();
@@ -87,13 +83,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
             textViewGenre = itemView.findViewById(R.id.card_text_view_genre);
             imageViewCover = itemView.findViewById(R.id.card_image_view_cover);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION)
-                        listener.onItemClick(entries.get(position));
-                }
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if(listener != null && position != RecyclerView.NO_POSITION)
+                    listener.onItemClick(entries.get(position));
             });
         }
     }

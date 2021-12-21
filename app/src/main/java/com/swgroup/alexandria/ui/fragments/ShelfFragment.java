@@ -2,9 +2,7 @@ package com.swgroup.alexandria.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +15,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.swgroup.alexandria.MainActivity;
 import com.swgroup.alexandria.data.database.ShelfEntry;
+import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.FragmentBookBinding;
-import com.swgroup.alexandria.init.SplashActivity;
 import com.swgroup.alexandria.ui.EntryAdapter;
 import com.swgroup.alexandria.ui.ShelfViewModel;
 import com.swgroup.alexandria.ui.reader.ReaderActivity;
-import com.swgroup.alexandria.data.internal.FileUtil;
+
 public class ShelfFragment extends Fragment {
 
     protected ShelfViewModel shelfViewModel;
@@ -107,15 +104,12 @@ public class ShelfFragment extends Fragment {
             }
         }).attachToRecyclerView(recyclerView);
 
-        entryAdapter.setOnClickListener(new EntryAdapter.onItemClickListener() {
-            @Override
-            public void onItemClick(ShelfEntry shelfEntry) {
-                System.out.println(shelfEntry.getFile());
-                Intent intent = new Intent(getActivity() , ReaderActivity.class);
-                intent.putExtra("epub_location", shelfEntry.getFile());
-                startActivity(intent);
-                Toast.makeText(getActivity(), shelfEntry.getTitle(), Toast.LENGTH_LONG).show();
-            }
+        entryAdapter.setOnClickListener(shelfEntry -> {
+            System.out.println(shelfEntry.getFile());
+            Intent intent = new Intent(getActivity() , ReaderActivity.class);
+            intent.putExtra("epub_location", shelfEntry.getFile());
+            startActivity(intent);
+            Toast.makeText(getActivity(), shelfEntry.getTitle(), Toast.LENGTH_LONG).show();
         });
 
         return binding.getRoot();

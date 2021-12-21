@@ -1,8 +1,8 @@
 package com.swgroup.alexandria.ui.reader;
+
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Handler;
@@ -12,21 +12,19 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.swgroup.alexandria.R;
 
 import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,21 +35,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.Spine;
 import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubReader;
 import nl.siegmann.epublib.service.MediatypeService;
+
 /**
  * Created by Avinash on 25-05-2017.
  */
 
 public class EpubReaderView extends WebView {
     public Book book;
-    public ArrayList<Chapter> ChapterList = new ArrayList<Chapter>();
+    public ArrayList<Chapter> ChapterList = new ArrayList<>();
     private int ChapterNumber=0;
     private float Progress = 0;
     private int PageNumber = 0;
@@ -170,41 +169,34 @@ public class EpubReaderView extends WebView {
         WebSettings settings = this.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDefaultTextEncodingName("UTF-8");
-        if (Build.VERSION.SDK_INT <= 19)
-            this.addJavascriptInterface(new JavaScriptInterface(), "js");
-        this.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_MOVE:
-                        if(Build.VERSION.SDK_INT <=19&&textSelectionMode)
-                            return false;
-                        else
-                            return true;
-                    case MotionEvent.ACTION_DOWN:
-                        touchX = event.getRawX();
-                        touchY = event.getRawY();
-                        touchTime = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        if (touchX - x > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
-                            NextPage();
-                        } else if (x - touchX > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
-                            PreviousPage();
-                        }else if (touchY - y  > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
-                            NextPage();
-                        }else if (y - touchY > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
-                            PreviousPage();
-                        }else if(Math.abs(y - touchY)< ConvertIntoPixel(10)&&Math.abs(touchX - x) < ConvertIntoPixel(10)&&(System.currentTimeMillis()-touchTime)<250) {
-                            Log.d("Tap Details",Math.abs(y - touchY)+" "+Math.abs(touchX - x)+" "+(System.currentTimeMillis()-touchTime));
-                            listener.OnSingleTap();
-                        }
-                        break;
-                }
-                return false;
+        this.setOnTouchListener((v, event) -> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_MOVE:
+                    return true;
+                case MotionEvent.ACTION_DOWN:
+                    touchX = event.getRawX();
+                    touchY = event.getRawY();
+                    touchTime = System.currentTimeMillis();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    float x = event.getRawX();
+                    float y = event.getRawY();
+                    if (touchX - x > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
+                        NextPage();
+                    } else if (x - touchX > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
+                        PreviousPage();
+                    }else if (touchY - y  > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
+                        NextPage();
+                    }else if (y - touchY > ConvertIntoPixel(100)&&(System.currentTimeMillis()-touchTime)<500) {
+                        PreviousPage();
+                    }else if(Math.abs(y - touchY)< ConvertIntoPixel(10)&&Math.abs(touchX - x) < ConvertIntoPixel(10)&&(System.currentTimeMillis()-touchTime)<250) {
+                        Log.d("Tap Details",Math.abs(y - touchY)+" "+Math.abs(touchX - x)+" "+(System.currentTimeMillis()-touchTime));
+                        listener.OnSingleTap();
+                    }
+                    break;
             }
+            return false;
         });
     }
     public int GetTheme(){
@@ -213,14 +205,7 @@ public class EpubReaderView extends WebView {
 
     private void ProcessJavascript(String js,String callbackFunction){
         //Log.d("EpubReader",callbackFunction+" Called");
-        if (Build.VERSION.SDK_INT > 19) {
-            this.evaluateJavascript("(function(){"+js+"})()", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {}
-            });
-        } else {
-            this.loadUrl("javascript:js."+callbackFunction+"((function(){"+js+"})())");
-        }
+        this.evaluateJavascript("(function(){"+js+"})()", value -> {});
     }
     public void SetTheme(int theme){
         if(theme==THEME_LIGHT) {
@@ -245,11 +230,8 @@ public class EpubReaderView extends WebView {
         //Log.d("EpubReader","AnnotateCalled");
         //Log.d("Annotate",jsonData);
         //Log.d("Annotate",jsonData.replace("'", "\\'").replace("\"","\\\""));
-        String js ="";
-        if(Build.VERSION.SDK_INT <= 19)
-            js = "\tvar data = JSON.parse('"+jsonData.replace("'", "\\'").replace("\"","\\\"")+"');\n";
-        else
-            js = "\tvar data = JSON.parse("+jsonData+");\n";
+        String js;
+        js = "\tvar data = JSON.parse("+jsonData+");\n";
         js = js + "\tvar selectedText = data['selectedText'];\n" +
                 "\tvar startOffset = data['startOffset'];\n" +
                 "\tvar endOffset = data['endOffset'];\n" +
@@ -328,35 +310,25 @@ public class EpubReaderView extends WebView {
                 "\t\tjsonData['status'] = 0;\n" +
                 "\t}\n" +
                 "\treturn (JSON.stringify(jsonData));";
-        if (Build.VERSION.SDK_INT > 19) {
-            this.evaluateJavascript("(function(){"+js+"})()",
-                    new ValueCallback<String>() {
-                        @Override
-                        public void onReceiveValue(String value) {
-                            //Log.v("EpubReader", "SELECTION>19:" + value);
-                            //Log.v("EpubReader", "SELECTION_P>19:" +  value.substring(1,value.length()-1).replaceAll("\\\\\"","\""));
-                            //Log.v("EpubReader", "SELECTION_P>19:" +  value.substring(1,value.length()-1).replaceAll("\\\\\"","\"").replaceAll("\\\\\\\\\"","\\\\\"").replaceAll("\\\\\\\"","\\\\\"").replaceAll("\\\\\\\\\\\"","\\\\\""));
-                            String text ="";
-                            try {
-                                String parse_json = value.substring(1,value.length()-1).replaceAll("\\\\\"","\"").replaceAll("\\\\\\\\\"","\\\\\"").replaceAll("\\\\\\\"","\\\\\"").replaceAll("\\\\\\\\\\\"","\\\\\"");
-                                JSONObject object = new JSONObject(parse_json);
-                                text = object.getString("selectedText");
-                            }catch(Exception e){e.printStackTrace();}
-                            JSONObject selectedTextJson = new JSONObject();
-                            try {
-                                selectedTextJson.put("DataString",value);
-                                selectedTextJson.put("ChapterNumber",ChapterNumber);
-                                selectedTextJson.put("SelectedText",text);
-                            }catch(Exception e){seletedText="";}
-                            seletedText = selectedTextJson.toString();
-                        }
-                    });
-        } else {
-            this.loadUrl("javascript:js.selection((function(){"+js+"})())");
-            //this.loadUrl("javascript:js.selection2((function(){window.getSelection().toString()})())");
-            //this.loadUrl("javascript:js.selection2((function(){document.getSelection().toString()})())");
-            //this.loadUrl("javascript:js.selection2((function(){document.selection.createRange().text})())");
-        }
+        this.evaluateJavascript("(function(){"+js+"})()",
+                value -> {
+                    //Log.v("EpubReader", "SELECTION>19:" + value);
+                    //Log.v("EpubReader", "SELECTION_P>19:" +  value.substring(1,value.length()-1).replaceAll("\\\\\"","\""));
+                    //Log.v("EpubReader", "SELECTION_P>19:" +  value.substring(1,value.length()-1).replaceAll("\\\\\"","\"").replaceAll("\\\\\\\\\"","\\\\\"").replaceAll("\\\\\\\"","\\\\\"").replaceAll("\\\\\\\\\\\"","\\\\\""));
+                    String text ="";
+                    try {
+                        String parse_json = value.substring(1,value.length()-1).replaceAll("\\\\\"","\"").replaceAll("\\\\\\\\\"","\\\\\"").replaceAll("\\\\\\\"","\\\\\"").replaceAll("\\\\\\\\\\\"","\\\\\"");
+                        JSONObject object = new JSONObject(parse_json);
+                        text = object.getString("selectedText");
+                    }catch(Exception e){e.printStackTrace();}
+                    JSONObject selectedTextJson = new JSONObject();
+                    try {
+                        selectedTextJson.put("DataString",value);
+                        selectedTextJson.put("ChapterNumber",ChapterNumber);
+                        selectedTextJson.put("SelectedText",text);
+                    }catch(Exception e){seletedText="";}
+                    seletedText = selectedTextJson.toString();
+                });
     }
     public String getSelectedText() {
         return seletedText;
@@ -403,14 +375,12 @@ public class EpubReaderView extends WebView {
         try {
             nl.siegmann.epublib.domain.Resources rst = book.getResources();
             Collection<Resource> clrst = rst.getAll();
-            Iterator<Resource> itr = clrst.iterator();
-            while (itr.hasNext()) {
-                Resource rs = itr.next();
-                if ((rs.getMediaType() == MediatypeService.JPG) || (rs.getMediaType() == MediatypeService.PNG) || (rs.getMediaType() == MediatypeService.GIF) || rs.getMediaType() == MediatypeService.CSS)  {
-                    File oppath1 = new File(directory+File.separator+rs.getHref());
+            for (Resource rs : clrst) {
+                if ((rs.getMediaType() == MediatypeService.JPG) || (rs.getMediaType() == MediatypeService.PNG) || (rs.getMediaType() == MediatypeService.GIF) || rs.getMediaType() == MediatypeService.CSS) {
+                    File oppath1 = new File(directory + File.separator + rs.getHref());
                     //Log.d("EpubReaderRD", rs.getHref()+"\t"+oppath1.getAbsolutePath()+"\t"+rs.getSize());
-                    File dir = new File(oppath1.getAbsolutePath().substring(0,oppath1.getAbsolutePath().lastIndexOf("/")));
-                    if(!dir.exists())
+                    File dir = new File(oppath1.getAbsolutePath().substring(0, oppath1.getAbsolutePath().lastIndexOf("/")));
+                    if (!dir.exists())
                         dir.mkdirs();
                     oppath1.createNewFile();
                     FileOutputStream fos1 = new FileOutputStream(oppath1);
@@ -426,9 +396,7 @@ public class EpubReaderView extends WebView {
         }
     }
     public void OpenEpubFile(String epub_location) {
-        InputStream epubInputStream = null;
-        try {
-            epubInputStream = new BufferedInputStream(new FileInputStream(epub_location));
+        try (InputStream epubInputStream = new BufferedInputStream(new FileInputStream(epub_location))) {
             this.book = (new EpubReader()).readEpub(epubInputStream);
             String epub_temp_extraction_location = context.getCacheDir() + "/tempfiles";
             deleteFiles(new File(epub_temp_extraction_location));
@@ -440,34 +408,27 @@ public class EpubReaderView extends WebView {
                 Log.e("Exception", e.getMessage());
             }
             File dir1 = new File(epub_temp_extraction_location + File.separator + "OEBPS");
-            String resource_folder = book.getOpfResource().getHref().replace("content.opf","").replace("/","");
+            String resource_folder = book.getOpfResource().getHref().replace("content.opf", "").replace("/", "");
             File dir2 = new File(epub_temp_extraction_location + File.separator + resource_folder);
             if (dir1.exists() && dir1.isDirectory()) {
                 ResourceLocation = "file://" + epub_temp_extraction_location + File.separator + "OEBPS" + File.separator;
-            }else if(dir2.exists() && dir2.isDirectory()&&!resource_folder.equals("")){
+            } else if (dir2.exists() && dir2.isDirectory() && !resource_folder.equals("")) {
                 ResourceLocation = "file://" + epub_temp_extraction_location + File.separator + resource_folder + File.separator;
-            }else {
+            } else {
                 ResourceLocation = "file://" + epub_temp_extraction_location + File.separator;
             }
             //Log.d("EpubReaderRL",ResourceLocation);
             ChapterList.clear();
-            if(ResourceLocation.contains("OEPBS")&&book.getTableOfContents().getTocReferences().size()>1)
+            if (ResourceLocation.contains("OEPBS") && book.getTableOfContents().getTocReferences().size() > 1)
                 ProcessChaptersByTOC(book.getTableOfContents().getTocReferences());
-            else if(book.getTableOfContents().getTocReferences().size()>1){
+            else if (book.getTableOfContents().getTocReferences().size() > 1) {
                 ProcessChaptersByTOC(book.getTableOfContents().getTocReferences());
-            }else
+            } else
                 ProcessChaptersBySpline(book.getSpine());
-        }catch(Exception e){
+        } catch (Exception ignored) {
 
-        } finally {
-            if(epubInputStream !=null) {
-                try {
-                    epubInputStream.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
         }
+        // ignore
     }
     private static void deleteFiles (File file){
         if(file.isDirectory()){
@@ -484,11 +445,11 @@ public class EpubReaderView extends WebView {
             for (TOCReference TOC : tocReferences) {
                 StringBuilder builder = new StringBuilder();
                 try{BufferedReader r = new BufferedReader(new InputStreamReader(TOC.getResource().getInputStream()));
-                    String aux = "";
+                    String aux;
                     while ((aux = r.readLine()) != null) {
                         builder.append(aux);
                     }
-                }catch(Exception e){}
+                }catch(Exception ignored){}
                 ChapterList.add(new Chapter(TOC.getTitle(),builder.toString(),TOC.getCompleteHref()));
                 if(TOC.getChildren().size()>0){
                     ProcessChaptersByTOC(TOC.getChildren());
@@ -502,7 +463,7 @@ public class EpubReaderView extends WebView {
             for(int i=0;i<spine.size();i++){
                 StringBuilder builder = new StringBuilder();
                 try{BufferedReader r = new BufferedReader(new InputStreamReader(spine.getResource(i).getInputStream()));
-                    String aux = "";
+                    String aux;
                     while ((aux = r.readLine()) != null) {
                         builder.append(aux);
                     }
@@ -532,15 +493,11 @@ public class EpubReaderView extends WebView {
             public void onPageFinished(WebView view, String url) {
                 SetTheme(current_theme);
                 final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int TotalHeight =EpubReaderView.this.GetTotalContentHeight();
-                        EpubReaderView.this.scrollTo(0,(int)(TotalHeight*Progress));
-                    }
+                handler.postDelayed(() -> {
+                    int TotalHeight =EpubReaderView.this.GetTotalContentHeight();
+                    EpubReaderView.this.scrollTo(0,(int)(TotalHeight*Progress));
                 },500);
             }
-            @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 listener.OnLinkClicked(url);
@@ -556,26 +513,24 @@ public class EpubReaderView extends WebView {
     }
     public void ListChaptersDialog(int theme){
         try {
-            ArrayList<String> ChapterListString = new ArrayList<String>();
+            ArrayList<String> ChapterListString = new ArrayList<>();
             for (int i=0;i<ChapterList.size();i++) {
                 ChapterListString.add(ChapterList.get(i).getName());
             }
-            final String[] items = ChapterListString.toArray(new String[ChapterListString.size()]);
+            final String[] items = ChapterListString.toArray(new String[0]);
             AlertDialog.Builder alertbuilder;
             if(theme==this.THEME_DARK)
                 alertbuilder = new AlertDialog.Builder(context,R.style.DarkDialog);
             else
                 alertbuilder = new AlertDialog.Builder(context,R.style.LightDialog);
             alertbuilder.setTitle("Select the Chapter");
-            alertbuilder.setItems(items, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                    GotoPosition(item,0);
-                    listener.OnChapterChangeListener(item);
-                }
+            alertbuilder.setItems(items, (dialog, item) -> {
+                GotoPosition(item,0);
+                listener.OnChapterChangeListener(item);
             });
             AlertDialog alert = alertbuilder.create();
             alert.show();
-        }catch (Exception e){}
+        }catch (Exception ignored){}
     }
     public void NextPage(){
         if(!loading) {
@@ -686,11 +641,7 @@ public class EpubReaderView extends WebView {
         alertDialog.setTitle(title);
         alertDialog.setMessage(Message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                (dialog, which) -> dialog.dismiss());
         alertDialog.show();
     }
     /*
