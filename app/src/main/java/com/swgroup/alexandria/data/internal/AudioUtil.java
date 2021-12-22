@@ -169,6 +169,7 @@ public class AudioUtil {
         File file = bitmapToFile(context,bitmap,image.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)+".png");
         return  file.getPath();}
         catch (Exception e){return "ic_cover_not_found.png";}
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
