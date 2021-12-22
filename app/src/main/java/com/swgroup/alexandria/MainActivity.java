@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public void onActivityResult(int requestcode, int resulCode, Intent data) {
         super.onActivityResult(requestcode,resulCode,data);
         if (resulCode == Activity.RESULT_OK) {
@@ -114,9 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("SOUT AUDIOBOOK " +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     //END DEBUG ONLY
                     shelfEntry.datatype=EntryType.Audiobook;
-                    shelfEntry.setTitle(inputFile.getName());
                     shelfEntry.setFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     AudioUtil allEntries = new AudioUtil(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName(), this);
+                    shelfEntry.setTitle(allEntries.RetrieveShelfEntryName(inputFile));
+                    shelfEntry.setCover(allEntries.RetrieveShelfEntryCover(inputFile));
                 }
                 // rename inputfile as title of the book
                 //String [] parts = inputFile.getName().split("\\.");

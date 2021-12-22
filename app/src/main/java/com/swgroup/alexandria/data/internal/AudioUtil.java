@@ -1,17 +1,22 @@
 package com.swgroup.alexandria.data.internal;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Environment;
+import android.widget.ImageView;
 
-import androidx.core.os.EnvironmentCompat;
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -22,8 +27,10 @@ public class AudioUtil {
     private Context context;
     private List<File> chapterFileArrayList = new ArrayList<>();
     private int position;
+    private MediaMetadataRetriever name;
     //popolating the array with the initial files and then modifying each instance of it
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public AudioUtil(String zipAudiopath, Context context) throws IOException {
         PopulateArrayList(zipAudiopath);
         context=this.context;
@@ -32,9 +39,19 @@ public class AudioUtil {
     public List<String> getChapterTitleList(){
         List<String> stringArrayList = new ArrayList<>();
         for (File file : chapterFileArrayList) {
-            stringArrayList.add(file.getName());
+            stringArrayList.add(RetrieveMediaName(file));
         }
+        Collections.sort(stringArrayList);
         return stringArrayList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public List<ImageView> getChapterImageList(){
+        List<ImageView> MediaArrayList = new ArrayList<>();
+        for (File file : chapterFileArrayList) {
+            MediaArrayList.add(RetrieveMediaImageView(file));
+        }
+        return MediaArrayList;
     }
 
     public File getChapterFile(int position){
@@ -70,12 +87,14 @@ public class AudioUtil {
         return chapterFileArrayList.get(position);}
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void PopulateArrayList (String audioFileName) throws IOException {
         chapterFileArrayList=UnZipToFileArrayList(audioFileName);
     }
 
 
         private static final int BUFFER_SIZE = 4096;
+        @RequiresApi(api = Build.VERSION_CODES.O)
         private List<File> UnZipToFileArrayList(String zipFilePath) throws IOException {
             List<File> FileArrayList = new ArrayList<>();
             ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
@@ -92,8 +111,11 @@ public class AudioUtil {
             return FileArrayList;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         private File extractFile(ZipInputStream zipIn, int i) throws IOException {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria","Chapter " + i +".mp3");
+            File tmpdir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria", "temp" );
+            tmpdir.mkdir();
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "/temp", + i +".mp3");
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             byte[] bytesIn = new byte[BUFFER_SIZE];
             int read = 0;
@@ -101,6 +123,87 @@ public class AudioUtil {
                 bos.write(bytesIn, 0, read);
             }
             bos.close();
+            //tmpdir.renameTo(new File(tmpdir.getAbsolutePath().replace("temp",RetrieveMediaAlbum(file))));
             return file;
         }
+
+        private String RetrieveMediaName(File file){
+            MediaMetadataRetriever name = new MediaMetadataRetriever();
+            name.setDataSource(file.getPath());
+            return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        }
+
+        private String RetrieveMediaAlbum(File file){
+        MediaMetadataRetriever name = new MediaMetadataRetriever();
+        name.setDataSource(file.getPath());
+        return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+        private ImageView RetrieveMediaImageView(File file){
+            MediaMetadataRetriever image = new MediaMetadataRetriever();
+            image.setDataSource(file.getPath());
+            if(image.getPrimaryImage()==null){return null;}
+            else{ Bitmap bitmap =image.getPrimaryImage();
+                ImageView imageView = new ImageView(context);
+                imageView.setImageBitmap(bitmap);
+                return imageView;
+            }
+        }
+
+        //UTILITY
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String RetrieveShelfEntryName(File inputfile) throws IOException {
+        MediaMetadataRetriever name = new MediaMetadataRetriever();
+        name.setDataSource(UnZipSingleFile(inputfile.getPath()).getPath());
+        return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public String RetrieveShelfEntryCover(File inputfile) throws IOException { //CREO L'IMMAGINE E RITORNO IL SUO NOME
+        MediaMetadataRetriever image = new MediaMetadataRetriever();
+        image.setDataSource(UnZipSingleFile(inputfile.getPath()).getPath());
+        try{
+        Bitmap bitmap =image.getPrimaryImage();
+        File file = bitmapToFile(context,bitmap,image.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)+".png");
+        return  file.getPath();}
+        catch (Exception e){return "ic_cover_not_found.png";}
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private File UnZipSingleFile(String zipFilePath) throws IOException {
+        List<File> FileArrayList = new ArrayList<>();
+        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+        ZipEntry entry = zipIn.getNextEntry();
+            FileArrayList.add(extractFile(zipIn, 0));
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        zipIn.close();
+        return FileArrayList.get(0);
+    }
+
+    private static File bitmapToFile(Context context,Bitmap bitmap, String fileNameToSave) { // File name like "image.png"
+        //create a file to write bitmap data
+        File file = null;
+        try {
+            file = new File(Environment.getExternalStorageDirectory() + File.separator + fileNameToSave);
+            file.createNewFile();
+
+            //Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0 , bos); // YOU can also save it in JPEG
+            byte[] bitmapdata = bos.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            return file;
+        }catch (Exception e){
+            e.printStackTrace();
+            return file; // it will return null
+        }
+    }
 }

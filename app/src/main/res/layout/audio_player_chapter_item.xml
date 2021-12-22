@@ -22,7 +22,7 @@
         </TextView>
 
         <ImageView
-            android:id="@+id/current_state"
+            android:id="@+id/chapter_image"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true">

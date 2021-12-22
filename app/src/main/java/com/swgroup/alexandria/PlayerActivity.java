@@ -1,12 +1,17 @@
 package com.swgroup.alexandria;
 
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swgroup.alexandria.data.internal.AudioUtil;
+import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityPlayerBinding;
 import com.swgroup.alexandria.databinding.ActivitySplashBinding;
 import com.swgroup.alexandria.ui.AudioChapterAdapter;
@@ -18,6 +23,7 @@ public class PlayerActivity extends AppCompatActivity {
     private ActivityPlayerBinding binding;
     private AudioChapterAdapter audioChapterAdapter;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,13 @@ public class PlayerActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         audioChapterAdapter.setOnClickListener(shelfEntry -> {
-
         });
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        FileUtil.destroyFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "temp");
+        super.onDestroy();
+    }
 }

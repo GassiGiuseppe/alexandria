@@ -23,7 +23,7 @@ public class FileUtil{
 
     private FileUtil() {    }
 
-    private static void destroyFile(String filePath){
+    public static void destroyFile(String filePath){
         try{
             File file = new File(filePath);
             file.delete();
