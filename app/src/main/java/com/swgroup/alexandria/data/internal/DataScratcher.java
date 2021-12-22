@@ -182,7 +182,6 @@ public class DataScratcher {
                     //System.out.println("YAYYY TI STO CREANDO");
                     FileOutputStream fout = new FileOutputStream(path + filename);
 
-                    // cteni zipu a zapis
                     while ((count = zis.read(buffer)) != -1) {
                         fout.write(buffer, 0, count);
                     }
@@ -206,19 +205,6 @@ public class DataScratcher {
     }
 
     public static void getMetaDataFromEpub (String path, String zipname, ShelfEntry shelfEntry){
-        // WHAT TO DO:
-        // 1) FAR CREARE SOLO I FILE CHE CI INTERESSANO
-        //      cosa ci serve?
-        //          content.opf, contiene questo:   <- QUESTO è IL NOME, LASCIA PERDERE LA CARTELLA
-        //          <reference href="Text/9788817027489_epub_cvi_r1.htm" title="Cover" type="cover" />   <-- COVER
-        //          <reference href="Text/part0000.html" title="Copertina" type="cover"/>
-
-        //          <item href="cover.jpeg" id="cover" media-type="image/jpeg"/>   NEL TAG MANIFEST
-        // 2) FARLI CREARE IN UNA CARTELLA TMP
-        // 3) RECUPERARE I DATI
-        // 4) DISTRUGGERE TUTTO
-
-        // ci dice se il file verrà creato
         String conteiner = ".opf";
         // first time i cancel everything execpt OEBPS_content.opf
         File content = createFile (conteiner, path,zipname);
@@ -249,7 +235,6 @@ public class DataScratcher {
         String[] parts1 = zipname.split("\\.");
         if(shelfEntry.title!=null) {
             copyOfEpub.renameTo(new File(path + shelfEntry.title + "." + parts1[1]));
-            //end
             shelfEntry.setFile(path + shelfEntry.title + "." + parts1[1]);
         }else{
             shelfEntry.title=parts1[0];

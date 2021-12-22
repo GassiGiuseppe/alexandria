@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     //END DEBUG ONLY
                     shelfEntry.datatype=EntryType.Audiobook;
                     shelfEntry.setFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
-                    AudioUtil allEntries = new AudioUtil(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName(), this);
+                    AudioUtil allEntries = new AudioUtil(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName(), this, true);
                     shelfEntry.setTitle(allEntries.RetrieveShelfEntryName(inputFile));
                     shelfEntry.setCover(allEntries.RetrieveShelfEntryCover(inputFile));
                 }

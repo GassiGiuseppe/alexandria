@@ -37,7 +37,7 @@ public class PlayerActivity extends AppCompatActivity {
         AudioUtil audioUtil = null;
         try {
             System.out.println("AUDIO LOCATION" + audio_location);
-            audioUtil = new AudioUtil(audio_location, this.getApplicationContext());
+            audioUtil = new AudioUtil(audio_location, this.getApplicationContext(), false);
         RecyclerView recyclerView = binding.itemlist;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         audioChapterAdapter = new AudioChapterAdapter();
@@ -52,8 +52,8 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause(){
         FileUtil.destroyFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "temp");
-        super.onDestroy();
+        super.onPause();
     }
 }

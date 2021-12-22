@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 
+import com.swgroup.alexandria.MainActivity;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,13 +30,17 @@ public class AudioUtil {
     private List<File> chapterFileArrayList = new ArrayList<>();
     private int position;
     private MediaMetadataRetriever name;
+    private String zipAudiopath;
     //popolating the array with the initial files and then modifying each instance of it
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public AudioUtil(String zipAudiopath, Context context) throws IOException {
-        PopulateArrayList(zipAudiopath);
+    public AudioUtil(String zipAudiopath, Context context, boolean isItMain) throws IOException {
+        if(!isItMain){
+        PopulateArrayList(zipAudiopath);}
+        zipAudiopath=this.zipAudiopath;
         context=this.context;
     }
+
 
     public List<String> getChapterTitleList(){
         List<String> stringArrayList = new ArrayList<>();
@@ -190,12 +196,10 @@ public class AudioUtil {
         try {
             file = new File(Environment.getExternalStorageDirectory() + File.separator + fileNameToSave);
             file.createNewFile();
-
             //Convert bitmap to byte array
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 0 , bos); // YOU can also save it in JPEG
             byte[] bitmapdata = bos.toByteArray();
-
             //write the bytes in file
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bitmapdata);
