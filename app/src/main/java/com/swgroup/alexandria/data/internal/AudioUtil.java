@@ -163,23 +163,33 @@ public class AudioUtil {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String RetrieveShelfEntryName(File inputfile) throws IOException {
         MediaMetadataRetriever name = new MediaMetadataRetriever();
-        name.setDataSource(UnZipSingleFile(inputfile.getPath()).getPath());
-        return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        //filetmp è un file temporaneo introdotto per lasciare pulita la cartella tmp
+        File filetemp = UnZipSingleFile(inputfile.getPath());
+        name.setDataSource(filetemp.getPath());
+        // l'output non viene ritornato direttamente perchè richiama MediaMetaData, che potrebbe avere ancora bisogno di file tmp (idrk)
+        String output =name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        filetemp.delete();
+        return output;
     }
     @RequiresApi(api = Build.VERSION_CODES.P)
     public String RetrieveShelfEntryCover(File inputfile) throws IOException { //CREO L'IMMAGINE E RITORNO IL SUO NOME
         MediaMetadataRetriever image = new MediaMetadataRetriever();
-        image.setDataSource(UnZipSingleFile(inputfile.getPath()).getPath());
+        //filetmp è un file temporaneo introdotto per lasciare pulita la cartella tmp
+        File filetemp = UnZipSingleFile(inputfile.getPath());
+        image.setDataSource(filetemp.getPath());
         try{
         Bitmap bitmap =image.getPrimaryImage();
+        //ATTENZIONE @simone non bisogna cancellare questo file, perchè questo file è la cover!!!
         File file = bitmapToFile(context,bitmap,image.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)+".png");
         String path = file.getPath();
-        file.delete();
+        filetemp.delete();
         return  path;}
-        catch (Exception e){return "ic_cover_not_found.png";}
+        catch (Exception e){
+            filetemp.delete();
+            return "ic_cover_not_found.png";}
 
     }
-
+    //end
     @RequiresApi(api = Build.VERSION_CODES.O)
     private File UnZipSingleFile(String zipFilePath) throws IOException {
         List<File> FileArrayList = new ArrayList<>();
