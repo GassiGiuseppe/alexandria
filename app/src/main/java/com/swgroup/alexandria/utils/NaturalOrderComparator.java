@@ -162,4 +162,14 @@ public abstract class NaturalOrderComparator implements Comparator
             return s.charAt(i);
         }
     }
+
+    static int compareEqual(String a, String b, int nza, int nzb) {
+        if (nza - nzb != 0)
+            return nza - nzb;
+
+        if (a.length() == b.length())
+            return a.compareTo(b);
+
+        return a.length() - b.length();
+    }
 }
