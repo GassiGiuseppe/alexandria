@@ -2,6 +2,7 @@ package com.swgroup.alexandria.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,6 +105,12 @@ public class ShelfFragment extends Fragment {
 
                 }
             }
+
+            @Override
+            public void onChildDraw (Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+
         }).attachToRecyclerView(recyclerView);
 
         entryAdapter.setOnClickListener(shelfEntry -> {
