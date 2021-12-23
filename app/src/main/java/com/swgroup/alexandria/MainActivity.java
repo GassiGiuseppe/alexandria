@@ -110,12 +110,12 @@ public class MainActivity extends AppCompatActivity {
                 ShelfEntry shelfEntry = new ShelfEntry();
                 //TODO METODO ALTERNATIVO IN BASE AL FILE MIMETYPE
                 if(inputFile.getPath().contains(".epub")){
-                    System.out.println("SOUT EPUB" +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
+                    //System.out.println("SOUT EPUB" +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     shelfEntry.datatype= EntryType.Book;
                     DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);}
                 else{
                     //DEBUG ONLY
-                    System.out.println("SOUT AUDIOBOOK " +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
+                    //System.out.println("SOUT AUDIOBOOK " +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     //END DEBUG ONLY
                     shelfEntry.datatype=EntryType.Audiobook;
                     shelfEntry.setFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
