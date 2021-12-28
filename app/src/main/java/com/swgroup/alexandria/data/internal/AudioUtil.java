@@ -3,6 +3,7 @@ package com.swgroup.alexandria.data.internal;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.swgroup.alexandria.MainActivity;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class AudioUtil {
     private int position;
     private MediaMetadataRetriever name;
     private String zipAudiopath;
+
     //popolating the array with the initial files and then modifying each instance of it
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -76,26 +79,10 @@ public class AudioUtil {
         return null;
     }
 
-    public File getNextChapterFile(){
-        if (position==(chapterFileArrayList.size()-1)){
-            return null;
-        }else{
-            position=position+1;
-        return chapterFileArrayList.get(position);}
-    }
-
-    public File getPrevChapterFile(){
-        if (position == 0){
-            return null;
-        }
-        else{
-            position=position-1;
-        return chapterFileArrayList.get(position);}
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void PopulateArrayList (String audioFileName) throws IOException {
         chapterFileArrayList=UnZipToFileArrayList(audioFileName);
+        Collections.sort(chapterFileArrayList);
     }
 
 
@@ -110,6 +97,7 @@ public class AudioUtil {
             while (entry != null) {
                 i++;
                 FileArrayList.add(extractFile(zipIn, i));
+                System.out.println("FILEARRAYLISTADD : " + FileArrayList.toString());
                 zipIn.closeEntry();
                 entry = zipIn.getNextEntry();
             }
@@ -121,7 +109,7 @@ public class AudioUtil {
         private File extractFile(ZipInputStream zipIn, int i) throws IOException {
             File tmpdir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria", "temp" );
             tmpdir.mkdir();
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "/temp", + i +".mp3");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "/temp", "tmp"+i +".mp3");
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             byte[] bytesIn = new byte[BUFFER_SIZE];
             int read = 0;
@@ -129,13 +117,24 @@ public class AudioUtil {
                 bos.write(bytesIn, 0, read);
             }
             bos.close();
+            System.out.println("FILE : " + file.toString());
+            String RealName =  RetrieveMediaTrackNumber(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria/temp/tmp"+i+".mp3");
+            file.renameTo(new File(file.getAbsolutePath().replace("tmp"+i,RealName)));
+            File f = new File(file.getAbsolutePath().replace("tmp"+i,RealName));
             //tmpdir.renameTo(new File(tmpdir.getAbsolutePath().replace("temp",RetrieveMediaAlbum(file))));
-            return file;
+            return f;
         }
 
         private String RetrieveMediaName(File file){
             MediaMetadataRetriever name = new MediaMetadataRetriever();
+            System.out.println("RETRIEVEMEDIANAME: "+file.toString());
             name.setDataSource(file.getPath());
+            return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        }
+
+        private String RetrieveMediaTrackNumber(String path){
+            MediaMetadataRetriever name = new MediaMetadataRetriever();
+            name.setDataSource(path);
             return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         }
 
@@ -143,7 +142,7 @@ public class AudioUtil {
         MediaMetadataRetriever name = new MediaMetadataRetriever();
         name.setDataSource(file.getPath());
         return name.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-    }
+        }
 
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -187,7 +186,6 @@ public class AudioUtil {
         catch (Exception e){
             filetemp.delete();
             return "ic_cover_not_found.png";}
-
     }
     //end
     @RequiresApi(api = Build.VERSION_CODES.O)

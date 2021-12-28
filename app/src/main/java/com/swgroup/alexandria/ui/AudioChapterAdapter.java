@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.swgroup.alexandria.R;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,12 @@ public class AudioChapterAdapter  extends RecyclerView.Adapter<AudioChapterAdapt
         return entries.get(position);
     }
 
-    public interface onItemClickListener {
+    public int getPositionAt(String string) {
+        return entries.indexOf(string);
+    }
 
-        void onChapterClick(String string);
+    public interface onItemClickListener {
+        void onChapterClick(String string) throws IOException;
     }
 
     @Override
@@ -61,8 +65,13 @@ public class AudioChapterAdapter  extends RecyclerView.Adapter<AudioChapterAdapt
 
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
-                if(listener != null && position != RecyclerView.NO_POSITION)
-                    listener.onChapterClick(entries.get(position));
+                if(listener != null && position != RecyclerView.NO_POSITION) {
+                    try {
+                        listener.onChapterClick(entries.get(position));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
         }
     }
