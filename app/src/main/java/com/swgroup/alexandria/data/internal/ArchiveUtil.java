@@ -1,5 +1,8 @@
 package com.swgroup.alexandria.data.internal;
 
+import com.github.junrar.Junrar;
+import com.github.junrar.exception.RarException;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 public class ArchiveUtil {
 
@@ -32,5 +38,38 @@ public class ArchiveUtil {
             }
         }
     }
+
+    public static void untar(File tarFile, File targetDirectory) throws IOException {
+        try (TarArchiveInputStream tis = new TarArchiveInputStream(
+                new BufferedInputStream(new FileInputStream(tarFile)))) {
+            TarArchiveEntry te;
+            int count;
+            byte[] buffer = new byte[8192];
+            while ((te = tis.getNextTarEntry()) != null) {
+                File file = new File(targetDirectory, te.getName());
+                File dir = te.isDirectory() ? file : file.getParentFile();
+                if (!dir.isDirectory() && !dir.mkdirs())
+                    throw  new FileNotFoundException("Failed to ensure directory: " +
+                            dir.getAbsolutePath());
+                if (te.isDirectory())
+                    continue;
+                try (FileOutputStream fout = new FileOutputStream(file)) {
+                    while ((count = tis.read(buffer)) != -1)
+                        fout.write(buffer, 0, count);
+                }
+            }
+
+        }
+    }
+
+    public static void unrar(File rarFile, File targetDirectory) throws IOException {
+        try {
+            Junrar.extract(rarFile, targetDirectory);
+        }
+        catch (RarException e) {
+            throw new IOException("unable to open archive");
+        }
+    }
+
 
 }

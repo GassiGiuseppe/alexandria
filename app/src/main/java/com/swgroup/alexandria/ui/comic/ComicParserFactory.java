@@ -18,6 +18,12 @@ public class ComicParserFactory {
         if (fileName.toLowerCase().matches(".*\\.(zip|cbz)$")) {
             parser = new CbzParser();
         }
+        if (fileName.toLowerCase().matches(".*\\.(rar|cbr)$")) {
+            parser = new CbrParser();
+        }
+        if (fileName.toLowerCase().matches(".*\\.(tar|cbt)$")) {
+            parser = new CbtParser();
+        }
 
         return tryParse(parser, file);
     }
