@@ -1,11 +1,14 @@
 package com.swgroup.alexandria;
 
-import android.media.AudioAttributes;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,9 +28,9 @@ public class PlayerActivity extends AppCompatActivity {
     private ActivityPlayerBinding binding;
     private AudioChapterAdapter audioChapterAdapter;
     private int CurrentPosition;
-    MediaPlayer mediaPlayer;
     AudioUtil audioUtil = null;
-
+    MediaPlayer mediaPlayer;
+    RecyclerView recyclerView;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -44,7 +47,7 @@ public class PlayerActivity extends AppCompatActivity {
         try {
             System.out.println("AUDIO LOCATION" + audio_location);
             audioUtil = new AudioUtil(audio_location, this.getApplicationContext(), false);
-        RecyclerView recyclerView = binding.itemlist;
+        recyclerView = binding.itemlist;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         audioChapterAdapter = new AudioChapterAdapter();
         audioChapterAdapter.setEntries(audioUtil.getChapterTitleList());
@@ -53,7 +56,7 @@ public class PlayerActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //GETTING STARTED WITH MEDIA PLAYER
-        mediaPlayer = new MediaPlayer();
+       /* mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioAttributes(
                 new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -64,74 +67,108 @@ public class PlayerActivity extends AppCompatActivity {
             mediaPlayer.setDataSource(getApplicationContext(), getUriFromPosition(0));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        mediaPlayer.start();
+        }*/
         //END OF MEDIA PLAYER
         audioChapterAdapter.setOnClickListener(string -> {
+            LightPosition("WHITE");
             CurrentPosition=audioChapterAdapter.getPositionAt(string);
-            try {
-                if(mediaPlayer.isPlaying())
-                    mediaPlayer.stop();
-                mediaPlayer.setDataSource(getApplicationContext(), getUriFromPosition(CurrentPosition));
-                mediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("CURRENT POSITION" +CurrentPosition);
+                    if(mediaPlayer!=null){
+                        mediaPlayer.release();
+                        mediaPlayer = null;}
+                mediaPlayer = MediaPlayer.create(this, getUriFromPosition(CurrentPosition));
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        if(mediaPlayer != null)
+                        {   mediaPlayer.release();
+                            mediaPlayer = null; }}});
+            System.out.println("CURRENT POSITION" + CurrentPosition);
+            LightPosition("GREY");
             mediaPlayer.start();
         });
 
         binding.nextChapter.setOnClickListener(next -> {
+            LightPosition("WHITE");
             CurrentPosition++;
-            if (CurrentPosition > audioChapterAdapter.getItemCount()){
-                CurrentPosition=0;}
-            try {
-                if(mediaPlayer.isPlaying())
-                    mediaPlayer.stop();
-                mediaPlayer.setDataSource(getApplicationContext(), getUriFromPosition(CurrentPosition));
-                mediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (CurrentPosition >= audioChapterAdapter.getItemCount()){
+                CurrentPosition=0; }
+                    if(mediaPlayer!=null){
+                        mediaPlayer.release();
+                        mediaPlayer = null;}
+                mediaPlayer = MediaPlayer.create(this, getUriFromPosition(CurrentPosition));
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        if(mediaPlayer != null) {
+                            mediaPlayer.release();
+                            mediaPlayer = null; }}});
+            LightPosition("GREY");
             mediaPlayer.start();
         });
 
         binding.prevChapter.setOnClickListener(prev -> {
-            CurrentPosition--;
-            if (CurrentPosition < 0){
+            LightPosition("WHITE");
+            if (CurrentPosition <= 0){
                 CurrentPosition=audioChapterAdapter.getItemCount();}
-            try {
-                if(mediaPlayer.isPlaying())
-                    mediaPlayer.stop();
-                mediaPlayer.setDataSource(getApplicationContext(), getUriFromPosition(CurrentPosition));
-                mediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            CurrentPosition--;
+            if(mediaPlayer!=null){
+                mediaPlayer.release();
+                mediaPlayer = null;}
+            mediaPlayer = MediaPlayer.create(this, getUriFromPosition(CurrentPosition));
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    if(mediaPlayer != null)
+                    {
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+                    }}});
+            System.out.println("POS" + CurrentPosition);
+            LightPosition("GREY");
             mediaPlayer.start();
         });
 
         binding.play.setOnClickListener(play -> {
+            LightPosition("WHITE");
+            if(mediaPlayer==null){
+                mediaPlayer = MediaPlayer.create(this, getUriFromPosition(CurrentPosition));
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                      if(mediaPlayer != null)
+                         {
+                             mediaPlayer.release();
+                             mediaPlayer = null;
+                         }}});}
+            LightPosition("GREY");
             mediaPlayer.start();
         });
 
         binding.pause.setOnClickListener(pause -> {
-            mediaPlayer.pause();
+            LightPosition("WHITE");
+            if(mediaPlayer!=null)
+                mediaPlayer.pause();
+            LightPosition("PAUSE");
         });
     }
 
     @Override
     protected void onPause(){
-        FileUtil.destroyFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria" + "temp");
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mediaPlayer.release();
-        //mediaPlayer = null;
+        //RELEASING RESOURCES
+        if(mediaPlayer != null)
+        {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
+
+
 
     protected Uri getUriFromPosition(int i){
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/temp/"+ audioUtil.getChapterFile(i).getName());
@@ -142,5 +179,17 @@ public class PlayerActivity extends AppCompatActivity {
                 .query(androidUri.getRawQuery())
                 .fragment(androidUri.getRawFragment())
                 .build();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void LightPosition(String code){
+
+        //Code WHITE: toggle to white
+        //Code GREY: toggle to grey
+        try{
+        View View = (binding.itemlist.findViewHolderForLayoutPosition(CurrentPosition)).itemView.findViewById(R.id.background);
+        if(code.equals("WHITE")){View.setBackgroundColor(Color.TRANSPARENT);}
+        if(code.equals("GREY")){View.setBackgroundColor(Color.LTGRAY);}
+        if(code.equals("PAUSE")){View.setBackgroundColor(Color.rgb(233,236,140));}}catch (Exception ignored){}
     }
 }

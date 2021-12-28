@@ -1,12 +1,15 @@
 package com.swgroup.alexandria.ui;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swgroup.alexandria.R;
@@ -58,11 +61,12 @@ public class AudioChapterAdapter  extends RecyclerView.Adapter<AudioChapterAdapt
 
     class EntryHolder extends RecyclerView.ViewHolder {
         private TextView chapter_title;
+        private androidx.cardview.widget.CardView background;
 
         protected EntryHolder(View itemView) {
             super(itemView);
             chapter_title = itemView.findViewById(R.id.chapter_title);
-
+            background = itemView.findViewById(R.id.background);
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if(listener != null && position != RecyclerView.NO_POSITION) {

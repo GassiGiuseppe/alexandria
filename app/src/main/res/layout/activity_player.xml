@@ -58,6 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/audio_player_chapter_item">
+
     </androidx.recyclerview.widget.RecyclerView>
 
 
