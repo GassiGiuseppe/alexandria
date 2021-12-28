@@ -179,4 +179,20 @@ public class FileUtil{
         }
     }
 
+    public void clearTempDir (){
+        //the fastest way is deleting temp then recreating it
+        //the following is the path to the directory (it does not contain the name)
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/";
+        //the following contains the name of the directory
+        String directoryName = "temp";
+        //let's create a file that is an instance of the directory, in this way we can destroy it
+        File directoryToDestroy = new File(path+directoryName);
+        //let's destroy the directory
+        directoryToDestroy.delete();
+        //let's create a file that is an instance of the directory, in this way we can create it
+        File directoryToCreate = new File (path+directoryName);
+        //in the end the directory is created empty
+        directoryToCreate.mkdir();
+    }
+
 }
