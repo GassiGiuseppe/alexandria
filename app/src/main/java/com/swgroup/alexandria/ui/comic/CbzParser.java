@@ -4,15 +4,13 @@ import android.net.Uri;
 
 import com.swgroup.alexandria.data.internal.EnvDirUtil;
 import com.swgroup.alexandria.data.internal.FileUtil;
-import com.swgroup.alexandria.data.internal.ZipUtil;
-import com.swgroup.alexandria.utils.NaturalOrderComparator;
+import com.swgroup.alexandria.data.internal.ArchiveUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.zip.ZipEntry;
 
 public class CbzParser implements ComicParser{
     private File cbzFile;
@@ -26,7 +24,7 @@ public class CbzParser implements ComicParser{
     @Override
     public void parse() throws IOException {
         File target = EnvDirUtil.getTargetDirectory("temp");
-        ZipUtil.unzip(cbzFile, target);
+        ArchiveUtil.unzip(cbzFile, target);
 
         File[] files = target.listFiles();
         entries.addAll(Arrays.asList(files));

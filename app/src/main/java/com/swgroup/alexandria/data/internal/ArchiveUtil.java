@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipUtil {
+public class ArchiveUtil {
 
     public static void unzip(File zipFile, File targetDirectory) throws IOException {
         try (ZipInputStream zis = new ZipInputStream(
