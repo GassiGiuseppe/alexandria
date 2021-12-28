@@ -79,7 +79,7 @@ public class DataScratcher {
                         //System.out.println(output);
                     }
                 } else if(temp.contains("<dc")){
-                    if(temp.contains("<dc:title>")){
+                    if(temp.contains("<dc:title")){
                         //scraping titolo
                         String [] parts = temp.split(">");
                         String partialAuthor = parts[1];
@@ -91,7 +91,7 @@ public class DataScratcher {
                         String partialAuthor = parts[1];
                         String [] parts1 = partialAuthor.split("<");
                         autore = parts1[0];
-                    }else if(temp.contains("<dc:subject>")){
+                    }else if(temp.contains("<dc:subject")){
                         //scraping genere
                         if(genere.equals("")){
                             String [] parts = temp.split(">");
@@ -158,9 +158,9 @@ public class DataScratcher {
             while ((ze = zis.getNextEntry()) != null) {
                 // zapis do souboru
                 filename = ze.getName();
-                if (firstLoop) {
+                /*if (firstLoop) {
                     firstLoop = false;
-                }
+                }*/
                 // Need to create directories if not exists, or
                 // it will generate an Exception...
 
@@ -215,12 +215,12 @@ public class DataScratcher {
         //System.out.println(coverName);
         if(coverName!=null) {
             coverName = modifyStringforMeta(coverName);
-            System.out.println(coverName);
+            //System.out.println(coverName);
             File cover = createFile(coverName, path, zipname);
 
             String[] parts = coverName.split("\\.");
             String pathname = path + shelfEntry.title + "Cover" + "." + parts[1];
-            System.out.println(pathname);
+            //System.out.println(pathname);
             cover.renameTo(new File(pathname));
             shelfEntry.setCover(shelfEntry.title+"Cover"+"."+parts[1]);
         }else{

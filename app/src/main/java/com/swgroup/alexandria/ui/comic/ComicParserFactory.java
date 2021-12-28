@@ -27,7 +27,8 @@ public class ComicParserFactory {
             return null;
         }
         try {
-            parser.parse(file);
+            parser.setFileLocation(file);
+            parser.parse();
         }
         catch (IOException e) {
             return null;

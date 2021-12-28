@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.swgroup.alexandria.ComicReaderActivity;
 import com.swgroup.alexandria.PlayerActivity;
 import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
@@ -120,11 +121,15 @@ public class ShelfFragment extends Fragment {
                 intent.putExtra("epub_location", shelfEntry.getFile());
                 System.out.println("FILE:  :::: BOOK" + shelfEntry.getFile());
                 startActivity(intent);
-            } else if(shelfEntry.datatype==EntryType.Audiobook){
+            } else if (shelfEntry.datatype==EntryType.Audiobook){
                 System.out.println("SHELF ENTRY AUDIO");
                 Intent intent = new Intent(getActivity() , PlayerActivity.class);
                 intent.putExtra("audio_location", shelfEntry.getFile());
                 System.out.println("FILE:  :::: AUDIO" + shelfEntry.getFile());
+                startActivity(intent);
+            } else if (shelfEntry.datatype==EntryType.Comic) {
+                Intent intent = new Intent(getActivity(), ComicReaderActivity.class);
+                intent.putExtra("comic_location", shelfEntry.getFile());
                 startActivity(intent);
             }
         });
