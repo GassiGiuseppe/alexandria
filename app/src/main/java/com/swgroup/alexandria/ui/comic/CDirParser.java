@@ -1,5 +1,9 @@
 package com.swgroup.alexandria.ui.comic;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+
 import com.swgroup.alexandria.utils.NaturalOrderComparator;
 
 import java.io.File;
@@ -11,16 +15,22 @@ import java.util.Collections;
 
 public class CDirParser implements ComicParser {
     private ArrayList<File> entries = new ArrayList<>();
+    private File dir;
 
     @Override
-    public void parse(File dir) throws IOException {
+    public void setFileLocation(File dir) throws IOException {
+        this.dir = dir;
+    }
+
+    @Override
+    public void parse() throws IOException {
         if (!dir.isDirectory()) {
             throw new IOException("Not a directory: " + dir.getAbsolutePath());
         }
 
         File[] files = dir.listFiles();
         if (files != null) {
-            for (File f : dir.listFiles())  {
+            for (File f : files)  {
                 if (f.isDirectory())
                     throw new IOException("Probably not a comic directory");
 
@@ -29,23 +39,23 @@ public class CDirParser implements ComicParser {
                 }
             }
 
-        Collections.sort(entries,
-            new NaturalOrderComparator() {
-                @Override
-                public String stringValue(Object o) {
-                    return ((File) o).getName();
-            }
-        });
+        Collections.sort(entries);
+
+    }
+
+
+    @Override
+    public ArrayList<Uri> getPagesUri() {
+        ArrayList<Uri> pagesUri = new ArrayList<>();
+        for(File e : entries)
+            pagesUri.add(Uri.fromFile(e));
+
+        return pagesUri;
     }
 
     @Override
     public int numPages() {
         return entries.size();
-    }
-
-    @Override
-    public InputStream getPage(int num) throws IOException {
-        return new FileInputStream(entries.get(num));
     }
 
     @Override

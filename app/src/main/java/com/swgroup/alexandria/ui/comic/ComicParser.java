@@ -1,15 +1,20 @@
 package com.swgroup.alexandria.ui.comic;
 
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
+import java.util.ArrayList;
 
 public interface ComicParser {
-    void parse(File file) throws IOException;
+    void setFileLocation(File file) throws IOException;
+    void parse() throws IOException;
     void destroy() throws IOException;
 
     String getType();
-    InputStream getPage(int num) throws IOException;
+    ArrayList<Uri> getPagesUri();
     int numPages();
 }

@@ -5,19 +5,22 @@ import android.os.Environment;
 import java.io.File;
 
 public class EnvDirUtil {
+    private static final String path = Environment
+            .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            +"/Alexandria/";
 
-    public static File getTargetDirectory (String input){
-        File output = null;
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/";
-        // creo il file per temp e se la cartella non esiste la creo
-        //creo il file temp
+    public static File getTargetDirectory(String input){
+        File output;
+
         output = new File(path+input);
-        //controllo che esista (nota bene, non ha estensione, controlla che sia una cartella)
-        if (!output.exists()){
-                //se non è una cartella la crea
-            output.mkdir();
-        }
+        if (!output.exists())
+            output.mkdir();     // se la cartella non esiste, creala
 
         return output;
     }
+
+    public static String atEnvDir(String input){
+        return path + input;
+    }
+
 }

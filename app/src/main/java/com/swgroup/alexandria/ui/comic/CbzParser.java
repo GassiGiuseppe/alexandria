@@ -1,50 +1,52 @@
 package com.swgroup.alexandria.ui.comic;
 
+import android.net.Uri;
+
+import com.swgroup.alexandria.data.internal.EnvDirUtil;
+import com.swgroup.alexandria.data.internal.FileUtil;
+import com.swgroup.alexandria.data.internal.ZipUtil;
 import com.swgroup.alexandria.utils.NaturalOrderComparator;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-public class CbzParser implements  ComicParser{
-    private ZipFile zipFile;
-    private ArrayList<ZipEntry> entries;
+public class CbzParser implements ComicParser{
+    private File cbzFile;
+    private ArrayList<File> entries = new ArrayList<>();
 
     @Override
-    public void parse(File file) throws IOException {
-        zipFile = new ZipFile(file.getAbsolutePath());
-        entries = new ArrayList<ZipEntry>();
+    public void setFileLocation(File file) throws IOException {
+        this.cbzFile = file;
+    }
 
-        Enumeration<? extends ZipEntry> e = zipFile.entries();
-        while (e.hasMoreElements()) {
-            ZipEntry ze = e.nextElement();
-            if (!ze.isDirectory() && ze.getName().toLowerCase().matches(".*\\.(jpg|jpeg|bmp|gif|png|webp)$"))
-                entries.add(ze);
-        }
+    @Override
+    public void parse() throws IOException {
+        File target = EnvDirUtil.getTargetDirectory("temp");
+        ZipUtil.unzip(cbzFile, target);
 
-        Collections.sort(entries,
-                new NaturalOrderComparator() {
-                    @Override
-                    public String stringValue(Object o) {
-                        return ((ZipEntry) o).getName();
-                }
-        });
+        File[] files = target.listFiles();
+        entries.addAll(Arrays.asList(files));
+
+        Collections.sort(entries);
+
+    }
+
+    @Override
+    public ArrayList<Uri> getPagesUri() {
+        ArrayList<Uri> pagesUri = new ArrayList<>();
+        for(File e : entries)
+            pagesUri.add(Uri.fromFile(e));
+
+        return pagesUri;
     }
 
     @Override
     public int numPages() {
         return entries.size();
-    }
-
-    @Override
-    public InputStream getPage(int num) throws IOException {
-        return zipFile.getInputStream(entries.get(num));
     }
 
     @Override
@@ -54,7 +56,7 @@ public class CbzParser implements  ComicParser{
 
     @Override
     public void destroy() throws IOException {
-        zipFile.close();
+        FileUtil.clearTempDir();
     }
 
 }

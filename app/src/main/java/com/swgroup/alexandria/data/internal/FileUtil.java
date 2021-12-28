@@ -179,7 +179,7 @@ public class FileUtil{
         }
     }
 
-    public void clearTempDir (){
+    public static void clearTempDir (){
         //the fastest way is deleting temp then recreating it
         //the following is the path to the directory (it does not contain the name)
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/";
