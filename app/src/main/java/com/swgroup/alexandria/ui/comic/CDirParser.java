@@ -13,22 +13,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CDirParser implements ComicParser {
-    private ArrayList<File> entries = new ArrayList<>();
-    private File dir;
-
-    @Override
-    public void setFileLocation(File dir) throws IOException {
-        this.dir = dir;
-    }
+public class CDirParser extends AbstractCbParser implements ComicParser {
 
     @Override
     public void parse() throws IOException {
-        if (!dir.isDirectory()) {
-            throw new IOException("Not a directory: " + dir.getAbsolutePath());
+        if (!cbFile.isDirectory()) {
+            throw new IOException("Not a directory: " + cbFile.getAbsolutePath());
         }
 
-        File[] files = dir.listFiles();
+        File[] files = cbFile.listFiles();
         if (files != null) {
             for (File f : files)  {
                 if (f.isDirectory())
@@ -43,21 +36,6 @@ public class CDirParser implements ComicParser {
 
     }
 
-
-    @Override
-    public ArrayList<Uri> getPagesUri() {
-        ArrayList<Uri> pagesUri = new ArrayList<>();
-        for(File e : entries)
-            pagesUri.add(Uri.fromFile(e));
-
-        return pagesUri;
-    }
-
-    @Override
-    public int numPages() {
-        return entries.size();
-    }
-
     @Override
     public String getType() {
         return "dir";
@@ -66,4 +44,5 @@ public class CDirParser implements ComicParser {
     @Override
     public void destroy() throws IOException {
     }
+
 }
