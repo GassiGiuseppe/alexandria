@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
@@ -59,6 +62,27 @@ public class ArchiveUtil {
                 }
             }
 
+        }
+    }
+
+    public static void unsevenzip(File sevenzFile, File targetDirectory) throws IOException {
+        try (SevenZFile szis = new SevenZFile(sevenzFile)) {
+            SevenZArchiveEntry sze;
+            int count;
+            byte[] buffer = new byte[8192];
+            while ((sze = szis.getNextEntry()) != null) {
+                File file = new File(targetDirectory, sze.getName());
+                File dir = sze.isDirectory() ? file : file.getParentFile();
+                if (!dir.isDirectory() && !dir.mkdirs())
+                    throw  new FileNotFoundException("Failed to ensure directory: " +
+                            dir.getAbsolutePath());
+                if (sze.isDirectory())
+                    continue;
+                try (FileOutputStream fout = new FileOutputStream(file)) {
+                    while ((count = szis.read(buffer)) != -1)
+                        fout.write(buffer, 0, count);
+                }
+            }
         }
     }
 

@@ -24,6 +24,9 @@ public class ComicParserFactory {
         if (fileName.toLowerCase().matches(".*\\.(tar|cbt)$")) {
             parser = new CbtParser();
         }
+        if (fileName.toLowerCase().matches(".*\\.(7z|cb7)$")) {
+            parser = new CbsevenParser();
+        }
 
         return tryParse(parser, file);
     }
