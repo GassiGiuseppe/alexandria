@@ -24,9 +24,17 @@ public abstract class AbstractCbParser implements ComicParser{
     @Override
     public ArrayList<Uri> getPagesUri() {
         ArrayList<Uri> pagesUri = new ArrayList<>();
-        for(File e : entries)
-            pagesUri.add(Uri.fromFile(e));
+        for(File e : entries) {
+            if (e.isDirectory()) {
+                File[] files = e.listFiles();
+                for(File f : files)
+                    pagesUri.add(Uri.fromFile(f));
+            } else {
+                if (e.getAbsolutePath().toLowerCase().matches(".*\\.(jpg|jpeg|bmp|gif|png|webp)$"))
+                    pagesUri.add(Uri.fromFile(e));
+            }
 
+        }
         return pagesUri;
     }
 
