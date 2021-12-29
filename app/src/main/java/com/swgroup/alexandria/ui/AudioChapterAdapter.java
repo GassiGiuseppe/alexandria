@@ -82,4 +82,5 @@ public class AudioChapterAdapter  extends RecyclerView.Adapter<AudioChapterAdapt
     public void setOnClickListener(AudioChapterAdapter.onItemClickListener listener) {
         this.listener = listener;
     }
+
 }
