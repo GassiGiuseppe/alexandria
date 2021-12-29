@@ -48,11 +48,4 @@ public abstract class AbstractCbParser implements ComicParser{
         return cbFile;
     }
 
-    public ArrayList<File> getEntries() {
-        return entries;
-    }
-
-    public void setEntries(ArrayList<File> entries) {
-        this.entries = entries;
-    }
 }
