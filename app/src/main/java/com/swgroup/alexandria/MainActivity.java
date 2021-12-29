@@ -28,6 +28,7 @@ import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.data.database.ShelfEntry;
 import com.swgroup.alexandria.data.internal.AudioUtil;
 import com.swgroup.alexandria.data.internal.DataScratcher;
+import com.swgroup.alexandria.data.internal.EnvDirUtil;
 import com.swgroup.alexandria.data.internal.FileUtil;
 import com.swgroup.alexandria.databinding.ActivityMainBinding;
 import com.swgroup.alexandria.ui.ShelfViewModel;
@@ -113,7 +114,12 @@ public class MainActivity extends AppCompatActivity {
                     //System.out.println("SOUT EPUB" +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     shelfEntry.datatype= EntryType.Book;
                     DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);}
-                else{
+                else if (inputFile.getPath().toLowerCase().matches(".*\\.(zip|cbz|rar|cbr)$")) {
+                    shelfEntry.datatype=EntryType.Comic;
+                    shelfEntry.setFile(EnvDirUtil.atEnvDir(inputFile.getName()));
+                    shelfEntry.setTitle(inputFile.getName());
+                    shelfEntry.setCover("ic_cover_not_found.png");
+                } else {
                     //DEBUG ONLY
                     //System.out.println("SOUT AUDIOBOOK " +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     //END DEBUG ONLY

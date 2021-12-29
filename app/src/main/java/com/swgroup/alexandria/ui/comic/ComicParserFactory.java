@@ -1,5 +1,6 @@
 package com.swgroup.alexandria.ui.comic;
 
+
 import java.io.File;
 import java.io.IOException;
 
@@ -18,6 +19,15 @@ public class ComicParserFactory {
         if (fileName.toLowerCase().matches(".*\\.(zip|cbz)$")) {
             parser = new CbzParser();
         }
+        if (fileName.toLowerCase().matches(".*\\.(rar|cbr)$")) {
+            parser = new CbrParser();
+        }
+        if (fileName.toLowerCase().matches(".*\\.(tar|cbt)$")) {
+            parser = new CbtParser();
+        }
+        if (fileName.toLowerCase().matches(".*\\.(7z|cb7)$")) {
+            parser = new CbsevenParser();
+        }
 
         return tryParse(parser, file);
     }
@@ -27,7 +37,8 @@ public class ComicParserFactory {
             return null;
         }
         try {
-            parser.parse(file);
+            parser.setFileLocation(file);
+            parser.parse();
         }
         catch (IOException e) {
             return null;

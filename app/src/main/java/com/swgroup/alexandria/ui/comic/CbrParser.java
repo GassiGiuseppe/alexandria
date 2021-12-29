@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class CbzParser extends AbstractCbParser implements ComicParser{
+public class CbrParser extends AbstractCbParser implements ComicParser{
 
     @Override
     public void parse() throws IOException {
         File target = EnvDirUtil.getTargetDirectory("temp");
-        ArchiveUtil.unzip(cbFile, target);
+        ArchiveUtil.unrar(cbFile, target);
 
         File[] files = target.listFiles();
         entries.addAll(Arrays.asList(files));
@@ -25,7 +25,7 @@ public class CbzParser extends AbstractCbParser implements ComicParser{
 
     @Override
     public String getType() {
-        return "zip";
+        return "rar";
     }
 
 }

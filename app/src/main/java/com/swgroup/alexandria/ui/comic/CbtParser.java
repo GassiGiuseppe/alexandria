@@ -1,6 +1,5 @@
 package com.swgroup.alexandria.ui.comic;
 
-
 import com.swgroup.alexandria.data.internal.EnvDirUtil;
 import com.swgroup.alexandria.data.internal.ArchiveUtil;
 
@@ -9,12 +8,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class CbzParser extends AbstractCbParser implements ComicParser{
+public class CbtParser extends AbstractCbParser implements ComicParser{
 
     @Override
     public void parse() throws IOException {
         File target = EnvDirUtil.getTargetDirectory("temp");
-        ArchiveUtil.unzip(cbFile, target);
+        ArchiveUtil.untar(cbFile, target);
 
         File[] files = target.listFiles();
         entries.addAll(Arrays.asList(files));
@@ -25,7 +24,7 @@ public class CbzParser extends AbstractCbParser implements ComicParser{
 
     @Override
     public String getType() {
-        return "zip";
+        return "tar";
     }
 
 }

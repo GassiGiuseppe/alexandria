@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.swgroup.alexandria.data.database.EntryType;
 import com.swgroup.alexandria.ui.EntryAdapter;
 import com.swgroup.alexandria.ui.ShelfViewModel;
 
@@ -22,8 +23,7 @@ public class ComicFragment extends ShelfFragment {
 
         shelfViewModel =
                 new  ViewModelProvider(this).get(ShelfViewModel.class);
-        // TODO: Change to Comic type
-        shelfViewModel.getAllEntries().observe(getViewLifecycleOwner(),
+        shelfViewModel.getByDataType(EntryType.Comic).observe(getViewLifecycleOwner(),
                 shelfEntries -> entryAdapter.setEntries(shelfEntries));
 
         return entryAdapter;

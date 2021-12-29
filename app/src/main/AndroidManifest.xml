@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.swgroup.alexandria">
+    package="com.swgroup.alexandria" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,7 +19,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Alexandria">
+        android:theme="@style/Theme.Alexandria" >
+        <activity
+            android:name=".ComicReaderActivity"
+            android:exported="false" />
         <activity
             android:name=".PlayerActivity"
             android:exported="false" />
@@ -38,7 +41,7 @@
             android:name=".init.SplashActivity"
             android:exported="true"
             android:label="Alexandria"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

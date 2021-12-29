@@ -179,4 +179,14 @@ public class FileUtil{
         }
     }
 
+    public static void clearTempDir (){
+
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+"temp");
+        for(File file: dir.listFiles()) {
+            file.delete();
+        }
+
+    }
+
+
 }

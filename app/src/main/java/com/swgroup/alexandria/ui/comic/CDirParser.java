@@ -1,26 +1,21 @@
 package com.swgroup.alexandria.ui.comic;
 
-import com.swgroup.alexandria.utils.NaturalOrderComparator;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 
-public class CDirParser implements ComicParser {
-    private ArrayList<File> entries = new ArrayList<>();
+public class CDirParser extends AbstractCbParser implements ComicParser {
 
     @Override
-    public void parse(File dir) throws IOException {
-        if (!dir.isDirectory()) {
-            throw new IOException("Not a directory: " + dir.getAbsolutePath());
+    public void parse() throws IOException {
+        if (!cbFile.isDirectory()) {
+            throw new IOException("Not a directory: " + cbFile.getAbsolutePath());
         }
 
-        File[] files = dir.listFiles();
+        File[] files = cbFile.listFiles();
         if (files != null) {
-            for (File f : dir.listFiles())  {
+            for (File f : files)  {
                 if (f.isDirectory())
                     throw new IOException("Probably not a comic directory");
 
@@ -29,23 +24,8 @@ public class CDirParser implements ComicParser {
                 }
             }
 
-        Collections.sort(entries,
-            new NaturalOrderComparator() {
-                @Override
-                public String stringValue(Object o) {
-                    return ((File) o).getName();
-            }
-        });
-    }
+        Collections.sort(entries);
 
-    @Override
-    public int numPages() {
-        return entries.size();
-    }
-
-    @Override
-    public InputStream getPage(int num) throws IOException {
-        return new FileInputStream(entries.get(num));
     }
 
     @Override
@@ -56,4 +36,5 @@ public class CDirParser implements ComicParser {
     @Override
     public void destroy() throws IOException {
     }
+
 }
