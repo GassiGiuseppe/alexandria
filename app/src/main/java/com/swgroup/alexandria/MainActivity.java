@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     //System.out.println("SOUT EPUB" +Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/"+inputFile.getName());
                     shelfEntry.datatype= EntryType.Book;
                     DataScratcher.getMetaDataFromEpub(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/", inputFile.getName(),shelfEntry);}
-                else if (inputFile.getPath().toLowerCase().matches(".*\\.(zip|cbz|rar|cbr)$")) {
+                else if (inputFile.getPath().toLowerCase().matches(".*\\.(cbz|rar|cbr)$")) {
                     shelfEntry.datatype=EntryType.Comic;
                     shelfEntry.setFile(EnvDirUtil.atEnvDir(inputFile.getName()));
                     shelfEntry.setTitle(inputFile.getName());
