@@ -1,16 +1,8 @@
 package com.swgroup.alexandria.ui.comic;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-
-import com.swgroup.alexandria.utils.NaturalOrderComparator;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class CDirParser extends AbstractCbParser implements ComicParser {

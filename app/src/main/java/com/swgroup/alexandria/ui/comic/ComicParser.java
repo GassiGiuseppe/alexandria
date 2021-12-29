@@ -1,11 +1,9 @@
 package com.swgroup.alexandria.ui.comic;
 
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
 import java.util.ArrayList;
 

@@ -1,14 +1,11 @@
 package com.swgroup.alexandria.ui.comic;
 
-import android.net.Uri;
 
 import com.swgroup.alexandria.data.internal.ArchiveUtil;
 import com.swgroup.alexandria.data.internal.EnvDirUtil;
-import com.swgroup.alexandria.data.internal.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
