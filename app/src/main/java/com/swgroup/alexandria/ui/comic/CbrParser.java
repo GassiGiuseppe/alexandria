@@ -12,19 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class CbrParser implements ComicParser{
-    private File cbrFile;
-    private ArrayList<File> entries = new ArrayList<>();
-
-    @Override
-    public void setFileLocation(File file) throws IOException {
-        this.cbrFile = file;
-    }
+public class CbrParser extends AbstractCbParser implements ComicParser{
 
     @Override
     public void parse() throws IOException {
         File target = EnvDirUtil.getTargetDirectory("temp");
-        ArchiveUtil.unrar(cbrFile, target);
+        ArchiveUtil.unrar(cbFile, target);
 
         File[] files = target.listFiles();
         entries.addAll(Arrays.asList(files));
@@ -34,27 +27,8 @@ public class CbrParser implements ComicParser{
     }
 
     @Override
-    public ArrayList<Uri> getPagesUri() {
-        ArrayList<Uri> pagesUri = new ArrayList<>();
-        for(File e : entries)
-            pagesUri.add(Uri.fromFile(e));
-
-        return pagesUri;
-    }
-
-    @Override
-    public int numPages() {
-        return entries.size();
-    }
-
-    @Override
     public String getType() {
-        return "zip";
-    }
-
-    @Override
-    public void destroy() throws IOException {
-        FileUtil.clearTempDir();
+        return "rar";
     }
 
 }
