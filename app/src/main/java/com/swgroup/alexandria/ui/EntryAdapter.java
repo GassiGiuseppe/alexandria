@@ -43,11 +43,11 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
         //holder.imageViewCover.;
         if(!(currentEntry.cover==null)){
             if(!currentEntry.cover.equals("ic_cover_not_found.png")) {
-                System.out.println("è stato questo");
+
                 File tmp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Alexandria/" + currentEntry.getCover());
-                // Uri uri = (Uri) tmp.toURI();
+
                 Bitmap bitmap = BitmapFactory.decodeFile(tmp.getPath());
-                // holder.imageViewCover.setImageURI(uri);
+
                 holder.imageViewCover.setImageBitmap(bitmap);
             }else{
                 //
