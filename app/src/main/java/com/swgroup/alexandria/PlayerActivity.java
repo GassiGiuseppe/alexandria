@@ -159,6 +159,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        FileUtil.clearTempDir();
         super.onDestroy();
         //RELEASING RESOURCES
         if(mediaPlayer != null)
@@ -167,8 +168,6 @@ public class PlayerActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
-
-
 
     protected Uri getUriFromPosition(int i){
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Alexandria/temp/"+ audioUtil.getChapterFile(i).getName());
@@ -181,10 +180,8 @@ public class PlayerActivity extends AppCompatActivity {
                 .build();
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void LightPosition(String code){
-
         //Code WHITE: toggle to white
         //Code GREY: toggle to grey
         try{

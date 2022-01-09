@@ -100,3 +100,4 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryHolder>
         this.listener = listener;
     }
 }
+

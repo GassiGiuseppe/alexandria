@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ShelfViewModel shelfViewModel;
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        navView = findViewById(R.id.nav_view);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -140,7 +141,5 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
-
 }
